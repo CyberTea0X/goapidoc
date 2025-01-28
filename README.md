@@ -27,15 +27,15 @@ type AddProfileInput struct {
 }
 
 var someProfile = AddProfileInput{
-			Name:      "Anatoliy",
-			Birthdate: time.Now().AddDate(18, 0, 0),
-			Contacts:  "+1234566789",
-			About:     "Golang programmer",
-			Gender:    "male",
-			City:      "Some city",
-			Position:  &models.PointJson{X: 0, Y: 0},
-			Tags:      []int64{1, 4, 10},
-		},
+	Name:      "Anatoliy",
+	Birthdate: time.Now().AddDate(18, 0, 0),
+	Contacts:  "+1234566789",
+	About:     "Golang programmer",
+	Gender:    "male",
+	City:      "Some city",
+	Position:  &models.PointJson{X: 0, Y: 0},
+	Tags:      []int64{1, 4, 10},
+}
 //...
 ```
 
