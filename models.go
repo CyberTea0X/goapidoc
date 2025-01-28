@@ -1,6 +1,8 @@
 package main
 
 import (
+	"encoding/json"
+	"os"
 	"reflect"
 )
 
@@ -122,6 +124,27 @@ type Document struct {
 	Tags           []Tag           `json:"tags,omitempty"`
 	Paths          map[string]Path `json:"paths"`
 	Components     *Components     `json:"components,omitempty"`
+}
+
+func (d *Document) SaveAsJson(filename string) error {
+	bytes, err := json.MarshalIndent(d, "", "    ")
+	if err != nil {
+		return err
+	}
+	file, err := os.Create(filename)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+	if _, err := file.Write(bytes); err != nil {
+		file.Close()
+		return err
+	}
+	if err := file.Close(); err != nil {
+		return err
+	}
+	return nil
+
 }
 
 type Tag struct {
