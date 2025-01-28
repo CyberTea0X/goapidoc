@@ -176,6 +176,7 @@ type Path struct {
 	Delete *Method `json:"delete,omitempty"`
 }
 
+// example: if first path doesn't have Get and second has Get, but doesn't have Post, merged will have both
 func (p *Path) Merge(p2 Path) {
 	if p.Post == nil {
 		p.Post = p2.Post
