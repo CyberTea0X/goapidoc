@@ -1,4 +1,4 @@
-package main
+package goapidoc
 
 import (
 	"encoding/json"
