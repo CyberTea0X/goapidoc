@@ -1,3 +1,3 @@
-module github.com/CyberTea0X/goapidoc
+module github.com/cybertea0x/goapidoc
 
 go 1.23.5
