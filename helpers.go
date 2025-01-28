@@ -135,9 +135,17 @@ func SchemaFromPrimitive(value any) (Schema, error) {
 	if kind == reflect.Struct || kind == reflect.Slice || kind == reflect.Pointer {
 		return Schema{}, errors.New("expected primitive")
 	}
+	var format string
+	switch kind {
+	case reflect.Int32:
+		format = "int32"
+	case reflect.Int64:
+		format = "int64"
+	}
 	return Schema{
 		Type:    toOapiType(t),
 		Example: value,
+		Format:  format,
 	}, nil
 }
 

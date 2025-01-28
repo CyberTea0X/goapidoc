@@ -118,16 +118,21 @@ type Components struct {
 	Schemas Schemas `json:"schemas,omitempty"`
 }
 
+type Server struct {
+	Url string `json:"url"`
+}
+
 type Document struct {
 	OpenApiVersion string          `json:"openapi"`
 	Info           Info            `json:"info"`
 	Tags           []Tag           `json:"tags,omitempty"`
 	Paths          map[string]Path `json:"paths"`
 	Components     *Components     `json:"components,omitempty"`
+	Servers        []Server        `json:"servers,omitempty"`
 }
 
 func (d *Document) SaveAsJson(filename string) error {
-	bytes, err := json.MarshalIndent(d, "", "    ")
+	bytes, err := json.MarshalIndent(d, "", "  ")
 	if err != nil {
 		return err
 	}
@@ -147,14 +152,22 @@ func (d *Document) SaveAsJson(filename string) error {
 
 }
 
+func (d *Document) AddPath(route string, newpath Path) {
+	path, exists := d.Paths[route]
+	if exists {
+		newpath.Merge(path)
+	}
+	d.Paths[route] = newpath
+}
+
 type Tag struct {
 	Name        string `json:"name,omitempty"`
 	Description string `json:"description,omitempty"`
 }
 
 type Path struct {
-	Post   *Method `json:"post,omitempty"`
 	Get    *Method `json:"get,omitempty"`
+	Post   *Method `json:"post,omitempty"`
 	Put    *Method `json:"put,omitempty"`
 	Patch  *Method `json:"patch,omitempty"`
 	Delete *Method `json:"delete,omitempty"`
@@ -179,26 +192,34 @@ func (p *Path) Merge(p2 Path) {
 }
 
 type Parameter struct {
-	In          string `json:"in"`
 	Name        string `json:"name"`
+	In          string `json:"in"`
 	Description string `json:"description"`
 	Required    bool   `json:"required"`
 	Schema      Schema `json:"schema"`
 }
 
 type Method struct {
-	Tags        []string         `json:"tags,omitempty"`
-	Summary     string           `json:"summary,omitempty"`
-	Description string           `json:"description,omitempty"`
-	OperationId string           `json:"operationId"`
-	Parameters  []Parameter      `json:"parameters,omitempty"`
-	RequestBody *RequestBody     `json:"requestBody,omitempty"`
-	Responses   map[int]Response `json:"responses"`
+	Summary     string              `json:"summary,omitempty"`
+	Description string              `json:"description,omitempty"`
+	OperationId string              `json:"operationId"`
+	Tags        []string            `json:"tags,omitempty"`
+	Parameters  []Parameter         `json:"parameters,omitempty"`
+	RequestBody *RequestBody        `json:"requestBody,omitempty"`
+	Responses   map[string]Response `json:"responses"`
+}
+
+type Header struct {
+	Description string `json:"description,omitempty"`
+	Required    bool   `json:"required,omitempty"`
+	Deprecated  bool   `json:"deprecated,omitempty"`
+	Schema      Schema `json:"schema"`
 }
 
 type Response struct {
-	Description string   `json:"description"`
-	Content     *Content `json:"content,omitempty"`
+	Description string            `json:"description"`
+	Headers     map[string]Header `json:"headers,omitempty"`
+	Content     *Content          `json:"content,omitempty"`
 }
 
 type RequestBody struct {
@@ -218,9 +239,9 @@ type Content struct {
 
 type Schema struct {
 	Type       OapiType       `json:"type,omitempty"`
+	Format     string         `json:"format,omitempty"`
+	Items      *Schema        `json:"items,omitempty"`
 	Properties map[string]any `json:"properties,omitempty"`
 	Ref        string         `json:"$ref,omitempty"`
 	Example    any            `json:"example,omitempty"`
-	Items      *Schema        `json:"items,omitempty"`
-	Format     string         `json:"format,omitempty"`
 }
