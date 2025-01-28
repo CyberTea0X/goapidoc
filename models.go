@@ -94,6 +94,7 @@ func toOapiType(t reflect.Type) OapiType {
 	panic("unhandled type: " + t.String())
 }
 
+// Some binary file like image.png
 var BinaryFile = ContentSchema{
 	Schema: Schema{
 		Type:   String,
@@ -101,6 +102,7 @@ var BinaryFile = ContentSchema{
 	},
 }
 
+// Document Info
 type Info struct {
 	Title       string            `json:"title,omitempty"`
 	Description string            `json:"description,omitempty"`
@@ -109,6 +111,7 @@ type Info struct {
 	License     *License          `json:"license,omitempty"`
 }
 
+// Document license
 type License struct {
 	Name string `json:"name"`
 	Url  string `json:"url"`
