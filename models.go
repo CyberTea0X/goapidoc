@@ -231,6 +231,10 @@ type RequestBody struct {
 	Content     *Content `json:"content,omitempty"`
 }
 
+func NewRequestBody(description string, content *Content) *RequestBody {
+	return &RequestBody{Description: description, Content: content}
+}
+
 type ContentSchema struct {
 	Schema Schema `json:"schema"`
 }

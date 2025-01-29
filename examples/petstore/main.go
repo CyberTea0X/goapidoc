@@ -1,7 +1,7 @@
 package main
 
 import (
-	oapi "github.com/CyberTea0X/goapidoc"
+	oapi "github.com/cybertea0x/goapidoc"
 )
 
 type Pet struct {
