@@ -274,33 +274,30 @@ generated openapi docs for this:
         },
         "position": {
             "type": "object",
-            "example": {
-                "type": "object",
-                "properties": {
-                    "x": {
-                        "type": "number",
-                        "example": 0
-                    },
-                    "y": {
-                        "type": "number",
-                        "example": 0
-                    }
+            "properties": {
+                "x": {
+                    "type": "number",
+                    "example": 44.957813
+                },
+                "y": {
+                    "type": "number",
+                    "example": 34.109547
                 }
             }
         },
         "tags": {
             "type": "array",
+            "items": {
+                "type": "integer"
+            },
             "example": [
                 1,
                 4,
                 10
-            ],
-            "items": {
-                "type": "integer"
-            }
+            ]
         }
     }
-},
+}
 ```
 
 check out petstore example
