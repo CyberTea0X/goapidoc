@@ -2,6 +2,7 @@ package goapidoc
 
 import (
 	"errors"
+	"log"
 	"reflect"
 	"strings"
 )
@@ -60,6 +61,31 @@ func ParametersFromStruct(value any, in string) []Parameter {
 	return parameters
 }
 
+func toSnake(camel string) (snake string) {
+	var b strings.Builder
+	diff := 'a' - 'A'
+	l := len(camel)
+	for i, v := range camel {
+		// A is 65, a is 97
+		if v >= 'a' {
+			b.WriteRune(v)
+			continue
+		}
+		// v is capital letter here
+		// irregard first letter
+		// add underscore if last letter is capital letter
+		// add underscore when previous letter is lowercase
+		// add underscore when next letter is lowercase
+		if (i != 0 || i == l-1) && (          // head and tail
+		(i > 0 && rune(camel[i-1]) >= 'a') || // pre
+			(i < l-1 && rune(camel[i+1]) >= 'a')) { //next
+			b.WriteRune('_')
+		}
+		b.WriteRune(v + diff)
+	}
+	return b.String()
+}
+
 func SchemaFromStruct(value any) (Schema, error) {
 	properties := make(map[string]any)
 	t := reflect.TypeOf(value)
@@ -70,28 +96,37 @@ func SchemaFromStruct(value any) (Schema, error) {
 	numberOfFields := rValue.NumField()
 	for i := 0; i < numberOfFields; i++ {
 		field := t.Field(i)
+		if field.IsExported() == false {
+			continue
+		}
 		fValue := rValue.Field(i)
 		propertyName := strings.Split(field.Tag.Get("json"), ",")[0]
+		if propertyName == "" {
+			propertyName = toSnake(field.Name)
+		}
 		if fValue.Type().Kind() == reflect.Pointer {
 			if fValue.IsNil() {
 				continue
 			}
 			fValue = fValue.Elem()
 		}
-		var example any
+		var fieldSchema Schema
 		if fValue.Type().Kind() == reflect.Struct && fValue.Type().Name() != "Time" {
 			var err error
-			example, err = SchemaFrom(fValue.Interface())
+			example, err := SchemaFrom(fValue.Interface())
 			if err != nil {
 				return Schema{}, err
 			}
+			fieldSchema = Schema{Type: "object", Properties: example.Properties}
 		} else {
-			example = fValue.Interface()
+			var err error
+			fieldSchema, err = SchemaFrom(fValue.Interface())
+			if err != nil {
+				log.Println("failed to generate schema from " + fValue.Type().String())
+				continue
+			}
 		}
-		properties[propertyName] = Schema{
-			Type:    toOapiType(fValue.Type()),
-			Example: example,
-		}
+		properties[propertyName] = fieldSchema
 		if fValue.Type().Kind() == reflect.Slice {
 			property := properties[propertyName].(Schema)
 			elemType := fValue.Type().Elem()
