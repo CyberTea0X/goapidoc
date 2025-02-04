@@ -2,6 +2,18 @@
 
 This is a simple and fast library for writing OpenAPI specification in Go.
 
+## Import
+
+```go
+import "github.com/cybertea0x/goapidoc"
+```
+
+or
+
+```bash
+go get github.com/cybertea0x/goapidoc
+```
+
 ## Main features
 
  - Typesafety
