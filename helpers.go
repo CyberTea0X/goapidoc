@@ -203,7 +203,7 @@ func ArrayOf(schema Schema) Schema {
 	}
 }
 
-func getSchemaRef(value any) Schema {
+func GetSchemaRef(value any) Schema {
 	return Schema{
 		Ref: "#/components/schemas/" + oapiSchemaName(value),
 	}
@@ -212,7 +212,7 @@ func getSchemaRef(value any) Schema {
 func ContentJsonSchemaRef(value any) *Content {
 	return &Content{
 		Json: &ContentSchema{
-			Schema: getSchemaRef(value),
+			Schema: GetSchemaRef(value),
 		},
 	}
 }
