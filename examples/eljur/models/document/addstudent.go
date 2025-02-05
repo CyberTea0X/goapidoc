@@ -15,8 +15,8 @@ var addStudentRoute = Route{
 	Name: "/student",
 	Path: goapidoc.Path{
 		Post: &goapidoc.Method{
-			Summary:     "Добавить нового ученика",
-			Description: "Добавляет нового ученика в указанный класс",
+			Summary:     "Add new student",
+			Description: "Add new student to the specified class",
 			OperationId: "addStudent",
 			Tags:        []string{"auth", "teacher"},
 			Parameters:  []goapidoc.Parameter{authParameter},
@@ -26,7 +26,7 @@ var addStudentRoute = Route{
 			},
 			Responses: map[string]goapidoc.Response{
 				"201": {
-					Description: "Ученик успешно добавлен в класс",
+					Description: "Student successfully added into class",
 					Content:     goapidoc.ContentJsonSchemaRef(addStudentOutput{}),
 				},
 				"400": Response400,

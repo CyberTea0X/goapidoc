@@ -22,14 +22,14 @@ var getStudentsRoute = Route{
 	Name: "/students",
 	Path: goapidoc.Path{
 		Get: &goapidoc.Method{
-			Summary:     "Получить список учеников",
-			Description: "Получить список всех учеников в указанном классе",
+			Summary:     "Get list of students",
+			Description: "Get a list of all students in a specified class",
 			OperationId: "getStudents",
 			Tags:        []string{"auth", "teacher"},
 			Parameters:  []goapidoc.Parameter{authParameter},
 			Responses: map[string]goapidoc.Response{
 				"200": {
-					Description: "Список учеников успешно получен",
+					Description: "List of students successfully received",
 					Content:     goapidoc.ContentJsonSchemaRef(getStudentsOutput{}),
 				},
 				"400": Response400,
@@ -47,15 +47,15 @@ var getStudentsRoute = Route{
 				Students: []Student{
 					{
 						Id:       1,
-						Name:     "Иван",
-						Lastname: "Иванов",
+						Name:     "Ivan",
+						Lastname: "Ivanov",
 						Phone:    "+1234566789",
 						Mail:     "vlomchetodumat@example.com",
 					},
 					{
 						Id:       2,
-						Name:     "Петр",
-						Lastname: "Петров",
+						Name:     "Petr",
+						Lastname: "Petrov",
 						Phone:    "+1234566789",
 						Mail:     "vlomchetodumat@example.com",
 					},

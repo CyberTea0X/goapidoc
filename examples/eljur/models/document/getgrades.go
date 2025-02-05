@@ -17,8 +17,8 @@ var getGradesRoute = Route{
 	Name: "/grades",
 	Path: goapidoc.Path{
 		Get: &goapidoc.Method{
-			Summary:     "Получить оценки",
-			Description: "Получить список оценок студента. given_at вместе с id урока определяет отдельную оценку. given_at это дата в формате unix",
+			Summary:     "Get ratings",
+			Description: "Get a list of student grades. given_at together with lesson id defines a single grade. given_at is a unix date",
 			OperationId: "getGrades",
 			Tags:        []string{"auth", "student", "teacher"},
 			Parameters: []goapidoc.Parameter{
@@ -27,7 +27,7 @@ var getGradesRoute = Route{
 			},
 			Responses: map[string]goapidoc.Response{
 				"200": {
-					Description: "Список оценок успешно получен",
+					Description: "The list of ratings has been successfully received.",
 					Content:     goapidoc.ContentJsonSchemaRef(getGradesOutput{}),
 				},
 				"400": Response400,
@@ -43,13 +43,13 @@ var getGradesRoute = Route{
 					{
 						LessonId: 1,
 						Grade:    95,
-						Comment:  "Молодец! Активно отвечал и работал на уроке.",
+						Comment:  "Well done! You answered actively and worked in class.",
 						GivenAt:  int64(UnixDateExample),
 					},
 					{
 						LessonId: 2,
 						Grade:    85,
-						Comment:  "Хорошая работа, но можно лучше.",
+						Comment:  "Good job, but could be better.",
 						GivenAt:  int64(UnixDateExample),
 					},
 				},

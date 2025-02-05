@@ -19,14 +19,14 @@ var registerRoute = Route{
 	Name: "/register",
 	Path: goapidoc.Path{
 		Post: &goapidoc.Method{
-			Summary:     "Регистрация",
-			Description: "Регистрация нового пользователя",
+			Summary:     "Registration",
+			Description: "New User Registration",
 			OperationId: "registerUser",
 			Tags:        []string{},
 			Parameters:  []goapidoc.Parameter{},
-			RequestBody: goapidoc.NewRequestBody("Пользовательские данные", goapidoc.ContentJsonSchemaRef(registerInput{})),
+			RequestBody: goapidoc.NewRequestBody("User data", goapidoc.ContentJsonSchemaRef(registerInput{})),
 			Responses: map[string]goapidoc.Response{
-				"201": *goapidoc.NewResponse("Пользователь успешно зарегистрирован", goapidoc.GetSchemaRef(registerOutput{})),
+				"201": *goapidoc.NewResponse("User registered successfully", goapidoc.GetSchemaRef(registerOutput{})),
 				"400": Response400,
 				"500": Response500,
 			},
@@ -35,8 +35,8 @@ var registerRoute = Route{
 	Components: goapidoc.Components{
 		Schemas: goapidoc.SchemasOf(
 			registerInput{
-				Name:     "Владислав",
-				Surname:  "Петров",
+				Name:     "Vladislav",
+				Surname:  "Petrov",
 				Mail:     "vladikdetskysadic@example.com",
 				Code:     "43124589",
 				Password: "vladikkrutoymalchik2008",

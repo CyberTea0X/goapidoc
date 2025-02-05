@@ -20,18 +20,18 @@ var addTeacherRoute = Route{
 	Name: "/teacher",
 	Path: goapidoc.Path{
 		Post: &goapidoc.Method{
-			Summary:     "Добавить нового учителя",
-			Description: "Добавляет нового учителя в систему",
+			Summary:     "Add new teacher",
+			Description: "Adds new teacher into system",
 			OperationId: "addTeacher",
 			Tags:        []string{"auth", "admin"},
 			Parameters:  []goapidoc.Parameter{authParameter},
 			RequestBody: &goapidoc.RequestBody{
-				Description: "Информация о учителе",
+				Description: "Teacher info",
 				Content:     goapidoc.ContentJsonSchemaRef(addTeacherInput{}),
 			},
 			Responses: map[string]goapidoc.Response{
 				"201": {
-					Description: "Учитель успешно добавлен",
+					Description: "Teacher added",
 					Content:     goapidoc.ContentJsonSchemaRef(addTeacherOutput{}),
 				},
 				"400": Response400,
@@ -43,8 +43,8 @@ var addTeacherRoute = Route{
 	Components: goapidoc.Components{
 		Schemas: goapidoc.SchemasOf(
 			addTeacherInput{
-				FirstName:   "Иван",
-				LastName:    "Иванов",
+				FirstName:   "Ivan",
+				LastName:    "Ivanov",
 				SubjectIds:  []int64{101, 102}, // Математика и Физика
 				Email:       "ivan.ivanov@school.com",
 				PhoneNumber: "+79123456789",

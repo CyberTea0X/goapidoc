@@ -27,7 +27,7 @@ var addClassRoute = Route{
 			},
 			Responses: map[string]goapidoc.Response{
 				"201": {
-					Description: "Класс успешно добавлен",
+					Description: "Class successfully added",
 					Content:     goapidoc.ContentJsonSchemaRef(addClassOutput{}),
 				},
 				"400": Response400,
@@ -37,7 +37,7 @@ var addClassRoute = Route{
 	},
 	Components: goapidoc.Components{
 		Schemas: goapidoc.SchemasOf(
-			addClassInput{Name: "8-A", Description: "8 класс школы такой-то", TeacherID: 542},
+			addClassInput{Name: "8-A", Description: "8 class", TeacherID: 542},
 			addClassOutput{ClassId: 142},
 		),
 	},

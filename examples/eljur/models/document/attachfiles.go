@@ -21,7 +21,7 @@ var attachFilesRoute = Route{
 			Tags:        []string{"auth", "teacher"},
 			Parameters:  []goapidoc.Parameter{authParameter},
 			RequestBody: &goapidoc.RequestBody{
-				Description: "Файлы для прикрепления к уроку",
+				Description: "Files to attach to the lesson",
 				Content: &goapidoc.Content{
 					FormData: &goapidoc.ContentSchema{
 						Schema: goapidoc.GetSchemaRef(attachFilesInput{}),
@@ -30,12 +30,12 @@ var attachFilesRoute = Route{
 			},
 			Responses: map[string]goapidoc.Response{
 				"200": {
-					Description: "Файлы успешно прикреплены к уроку",
+					Description: "Files successfully attached to the lesson",
 					Content:     goapidoc.ContentJsonSchemaRef(attachFilesOutput{}),
 				},
 				"400": Response400,
 				"403": Response403,
-				"404": *goapidoc.NewResponse("Такого урока не существует", errorSchema),
+				"404": *goapidoc.NewResponse("There is no such lesson", errorSchema),
 				"500": Response500,
 			},
 		},

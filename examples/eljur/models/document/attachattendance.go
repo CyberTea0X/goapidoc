@@ -16,13 +16,13 @@ var attachAttendanceRoute = Route{
 	Name: "/attendance",
 	Path: goapidoc.Path{
 		Put: &goapidoc.Method{
-			Summary:     "Прикрепить посещаемость",
-			Description: "Прикрепляет список посещаемости к уроку. Если для ученика уже была прикреплена посещаемость, то она обновляется",
+			Summary:     "Attach attendance",
+			Description: "Attaches the attendance list to the lesson. If attendance was already connected for the student, it is updated",
 			OperationId: "attachAttendance",
 			Tags:        []string{"auth", "teacher"},
 			Parameters:  []goapidoc.Parameter{authParameter},
 			RequestBody: &goapidoc.RequestBody{
-				Description: "Список записей где указан урок и факт посещения/отсутствия",
+				Description: "List of records where the lesson and the fact of attendance/absence are indicated",
 				Content:     goapidoc.ContentJsonSchemaRef(attachAttendanceInput{}),
 			},
 			Responses: map[string]goapidoc.Response{

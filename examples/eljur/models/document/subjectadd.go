@@ -21,14 +21,14 @@ var subjectAddRoute = Route{
 	Name: "/subject",
 	Path: goapidoc.Path{
 		Post: &goapidoc.Method{
-			Summary:     "Добавить предмет",
-			Description: "Добавить новый учебный предмет",
+			Summary:     "Add item",
+			Description: "Add a new subject",
 			OperationId: "subjectAdd",
 			Tags:        []string{"auth", "teacher"},
 			Parameters:  []goapidoc.Parameter{authParameter},
-			RequestBody: goapidoc.NewRequestBody("Параметры предмета", goapidoc.ContentJsonSchemaRef(subjectAddInput{})),
+			RequestBody: goapidoc.NewRequestBody("Item Parameters", goapidoc.ContentJsonSchemaRef(subjectAddInput{})),
 			Responses: map[string]goapidoc.Response{
-				"201": *goapidoc.NewResponse("Код и ссылка на страницу предмета", goapidoc.GetSchemaRef(subjectAddOutput{})),
+				"201": *goapidoc.NewResponse("Code and link to the item page", goapidoc.GetSchemaRef(subjectAddOutput{})),
 				"400": Response400,
 				"403": Response403,
 				"500": Response500,
@@ -38,8 +38,8 @@ var subjectAddRoute = Route{
 	Components: goapidoc.Components{
 		Schemas: goapidoc.SchemasOf(
 			subjectAddInput{
-				Name:          "Математика",
-				Desription:    "Наука о числах и фигурах",
+				Name:          "Mathematics",
+				Desription:    "The Science of Numbers and Shapes",
 				Public:        true,
 				RequiresGroup: "9 класс",
 				Instructor:    13,

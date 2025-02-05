@@ -32,7 +32,7 @@ var errorSchema = oapi.Schema{
 	Properties: map[string]any{
 		"error": oapi.Schema{
 			Type:    "string",
-			Example: "Описание ошибки",
+			Example: "Error description",
 		},
 	},
 }
@@ -41,27 +41,27 @@ var infoOk = oapi.Schema{
 	Properties: map[string]any{
 		"info": oapi.Schema{
 			Type:    oapi.String,
-			Example: "Всё хорошо",
+			Example: "Everything is fine",
 		},
 	},
 }
 
-var Response200Empty = oapi.Response{Description: "Операция успешно выполнена. Возвращать результат смысла нет."}
-var Response201Empty = oapi.Response{Description: "Ресурс успешно создан. Возвращать смысла нет"}
+var Response200Empty = oapi.Response{Description: "The operation was completed successfully. There is no point in returning the result."}
+var Response201Empty = oapi.Response{Description: "The resource has been successfully created. There is no point in returning it."}
 var Response204 = oapi.Response{Description: "No content"}
-var Response400 = *oapi.NewResponse("Неверный ввод", errorSchema)
-var Response403 = oapi.Response{Description: "Доступ запрещён"}
-var Response409 = oapi.Response{Description: "Конфликт с другим ресурсом"}
-var Response500 = oapi.Response{Description: "Ошибка сервера"}
-var InfoResponse = *oapi.NewResponse("Операция успешно. Json содержит info с доп.информацией", infoOk)
+var Response400 = *oapi.NewResponse("Invalid input", errorSchema)
+var Response403 = oapi.Response{Description: "Access Denied"}
+var Response409 = oapi.Response{Description: "Conflict with another resource"}
+var Response500 = oapi.Response{Description: "Server error"}
+var InfoResponse = *oapi.NewResponse("Operation successful. Json contains info with additional information", infoOk)
 var UnixDateExample = int64(10250045)
 
 func BuildDocument() *oapi.Document {
 	doc := oapi.Document{
 		OpenApiVersion: "3.1.0",
 		Info: oapi.Info{
-			Title:       "Сервис электронного журнала",
-			Description: "Сервис обеспечивающий работу электронного журнала",
+			Title:       "Electronic journal service",
+			Description: "Service providing operation of the electronic journal",
 			Version:     "1.0",
 			Contact:     map[string]string{},
 			License:     &oapi.License{},

@@ -17,17 +17,17 @@ var giveGradeRoute = Route{
 	Name: "/grade",
 	Path: goapidoc.Path{
 		Post: &goapidoc.Method{
-			Summary:     "Поставить оценку",
-			Description: "Поставить оценку",
+			Summary:     "Rate this",
+			Description: "Rate this",
 			OperationId: "giveGrade",
 			Tags:        []string{"auth", "teacher"},
 			Parameters:  []goapidoc.Parameter{authParameter},
 			RequestBody: &goapidoc.RequestBody{
-				Description: "Описание оценки",
+				Description: "Rate this",
 			},
 			Responses: map[string]goapidoc.Response{
 				"201": *goapidoc.NewResponse(
-					"Оценка поставлена. given_at это unix дата когда она была выставлена, возвращается",
+					"The rating has been set. given_at is the unix date when it was set, returned",
 					goapidoc.MustBuildSchemaFrom(giveGradeOutput{GivenAt: UnixDateExample}),
 				),
 				"400": Response400,
@@ -42,7 +42,7 @@ var giveGradeRoute = Route{
 				LessonId:  1,
 				StudentId: 1,
 				Grade:     95,
-				Comment:   "Молодец! Активно отвечал и работал на уроке.",
+				Comment:   "Well done! You answered actively and worked in class.",
 			},
 		),
 	},

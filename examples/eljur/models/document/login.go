@@ -18,13 +18,13 @@ var loginRoute = Route{
 	Name: "/login",
 	Path: goapidoc.Path{
 		Get: &goapidoc.Method{
-			Summary:     "Вход",
-			Description: "Вход по полю и паролю",
+			Summary:     "Login",
+			Description: "Login by field and password",
 			OperationId: "loginUser",
 			Tags:        []string{},
 			Parameters:  goapidoc.ParametersFromStruct(loginInput{Code: "43124589", Password: "vladikkrutoymalchik2008"}, "query"),
 			Responses: map[string]goapidoc.Response{
-				"201": *goapidoc.NewResponse("Пользователь успешно вошёл в систему", goapidoc.GetSchemaRef(loginOutput{})),
+				"201": *goapidoc.NewResponse("The user has successfully logged in.", goapidoc.GetSchemaRef(loginOutput{})),
 				"401": *goapidoc.NewResponse("Wrong password or login", errorSchema),
 				"400": Response400,
 				"500": Response500,

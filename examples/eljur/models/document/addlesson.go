@@ -28,12 +28,12 @@ var addLessonRoute = Route{
 			Tags:        []string{"auth", "teacher"},
 			Parameters:  []goapidoc.Parameter{authParameter},
 			RequestBody: &goapidoc.RequestBody{
-				Description: "Информация о уроке",
+				Description: "Lesson info",
 				Content:     goapidoc.ContentJsonSchemaRef(addLessonInput{}),
 			},
 			Responses: map[string]goapidoc.Response{
 				"201": {
-					Description: "Урок успешно добавлен",
+					Description: "Lesson successfully added",
 					Content:     goapidoc.ContentJsonSchemaRef(addLessonOutput{}),
 				},
 				"400": Response400,
@@ -47,8 +47,8 @@ var addLessonRoute = Route{
 		Schemas: goapidoc.SchemasOf(
 			addLessonInput{
 				Index:          1,
-				Name:           "Математика 1 урок",
-				Description:    "Сложение и вычитание",
+				Name:           "Math first lesson",
+				Description:    "Addition and Subtraction",
 				IsOnline:       true,
 				Date:           "2023-10-15",
 				SubjectId:      1,

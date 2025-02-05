@@ -1,8 +1,8 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "Сервис электронного журнала",
-    "description": "Сервис обеспечивающий работу электронного журнала",
+    "title": "Electronic journal service",
+    "description": "Service providing operation of the electronic journal",
     "version": "1.0",
     "license": {
       "name": "",
@@ -26,8 +26,8 @@
   "paths": {
     "/attendance": {
       "put": {
-        "summary": "Прикрепить посещаемость",
-        "description": "Прикрепляет список посещаемости к уроку. Если для ученика уже была прикреплена посещаемость, то она обновляется",
+        "summary": "Attach attendance",
+        "description": "Attaches the attendance list to the lesson. If attendance was already connected for the student, it is updated",
         "operationId": "attachAttendance",
         "tags": [
           "auth",
@@ -46,7 +46,7 @@
           }
         ],
         "requestBody": {
-          "description": "Список записей где указан урок и факт посещения/отсутствия",
+          "description": "List of records where the lesson and the fact of attendance/absence are indicated",
           "content": {
             "application/json": {
               "schema": {
@@ -57,10 +57,10 @@
         },
         "responses": {
           "200": {
-            "description": "Операция успешно выполнена. Возвращать результат смысла нет."
+            "description": "The operation was completed successfully. There is no point in returning the result."
           },
           "400": {
-            "description": "Неверный ввод",
+            "description": "Invalid input",
             "content": {
               "application/json": {
                 "schema": {
@@ -68,7 +68,7 @@
                   "properties": {
                     "error": {
                       "type": "string",
-                      "example": "Описание ошибки"
+                      "example": "Error description"
                     }
                   }
                 }
@@ -76,10 +76,10 @@
             }
           },
           "403": {
-            "description": "Доступ запрещён"
+            "description": "Access Denied"
           },
           "500": {
-            "description": "Ошибка сервера"
+            "description": "Server error"
           }
         }
       }
@@ -116,7 +116,7 @@
         },
         "responses": {
           "201": {
-            "description": "Класс успешно добавлен",
+            "description": "Class successfully added",
             "content": {
               "application/json": {
                 "schema": {
@@ -126,7 +126,7 @@
             }
           },
           "400": {
-            "description": "Неверный ввод",
+            "description": "Invalid input",
             "content": {
               "application/json": {
                 "schema": {
@@ -134,7 +134,7 @@
                   "properties": {
                     "error": {
                       "type": "string",
-                      "example": "Описание ошибки"
+                      "example": "Error description"
                     }
                   }
                 }
@@ -142,15 +142,15 @@
             }
           },
           "500": {
-            "description": "Ошибка сервера"
+            "description": "Server error"
           }
         }
       }
     },
     "/grade": {
       "post": {
-        "summary": "Поставить оценку",
-        "description": "Поставить оценку",
+        "summary": "Rate this",
+        "description": "Rate this",
         "operationId": "giveGrade",
         "tags": [
           "auth",
@@ -169,11 +169,11 @@
           }
         ],
         "requestBody": {
-          "description": "Описание оценки"
+          "description": "Rate this"
         },
         "responses": {
           "201": {
-            "description": "Оценка поставлена. given_at это unix дата когда она была выставлена, возвращается",
+            "description": "The rating has been set. given_at is the unix date when it was set, returned",
             "content": {
               "application/json": {
                 "schema": {
@@ -190,7 +190,7 @@
             }
           },
           "400": {
-            "description": "Неверный ввод",
+            "description": "Invalid input",
             "content": {
               "application/json": {
                 "schema": {
@@ -198,7 +198,7 @@
                   "properties": {
                     "error": {
                       "type": "string",
-                      "example": "Описание ошибки"
+                      "example": "Error description"
                     }
                   }
                 }
@@ -206,18 +206,18 @@
             }
           },
           "403": {
-            "description": "Доступ запрещён"
+            "description": "Access Denied"
           },
           "500": {
-            "description": "Ошибка сервера"
+            "description": "Server error"
           }
         }
       }
     },
     "/grades": {
       "get": {
-        "summary": "Получить оценки",
-        "description": "Получить список оценок студента. given_at вместе с id урока определяет отдельную оценку. given_at это дата в формате unix",
+        "summary": "Get ratings",
+        "description": "Get a list of student grades. given_at together with lesson id defines a single grade. given_at is a unix date",
         "operationId": "getGrades",
         "tags": [
           "auth",
@@ -245,7 +245,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Список оценок успешно получен",
+            "description": "The list of ratings has been successfully received.",
             "content": {
               "application/json": {
                 "schema": {
@@ -255,7 +255,7 @@
             }
           },
           "400": {
-            "description": "Неверный ввод",
+            "description": "Invalid input",
             "content": {
               "application/json": {
                 "schema": {
@@ -263,7 +263,7 @@
                   "properties": {
                     "error": {
                       "type": "string",
-                      "example": "Описание ошибки"
+                      "example": "Error description"
                     }
                   }
                 }
@@ -271,10 +271,10 @@
             }
           },
           "403": {
-            "description": "Доступ запрещён"
+            "description": "Access Denied"
           },
           "500": {
-            "description": "Ошибка сервера"
+            "description": "Server error"
           }
         }
       }
@@ -301,7 +301,7 @@
           }
         ],
         "requestBody": {
-          "description": "Информация о уроке",
+          "description": "Lesson info",
           "content": {
             "application/json": {
               "schema": {
@@ -312,7 +312,7 @@
         },
         "responses": {
           "201": {
-            "description": "Урок успешно добавлен",
+            "description": "Lesson successfully added",
             "content": {
               "application/json": {
                 "schema": {
@@ -322,7 +322,7 @@
             }
           },
           "400": {
-            "description": "Неверный ввод",
+            "description": "Invalid input",
             "content": {
               "application/json": {
                 "schema": {
@@ -330,7 +330,7 @@
                   "properties": {
                     "error": {
                       "type": "string",
-                      "example": "Описание ошибки"
+                      "example": "Error description"
                     }
                   }
                 }
@@ -338,13 +338,13 @@
             }
           },
           "403": {
-            "description": "Доступ запрещён"
+            "description": "Access Denied"
           },
           "409": {
-            "description": "Конфликт с другим ресурсом"
+            "description": "Conflict with another resource"
           },
           "500": {
-            "description": "Ошибка сервера"
+            "description": "Server error"
           }
         }
       }
@@ -371,7 +371,7 @@
           }
         ],
         "requestBody": {
-          "description": "Файлы для прикрепления к уроку",
+          "description": "Files to attach to the lesson",
           "content": {
             "multipart/form-data": {
               "schema": {
@@ -382,7 +382,7 @@
         },
         "responses": {
           "200": {
-            "description": "Файлы успешно прикреплены к уроку",
+            "description": "Files successfully attached to the lesson",
             "content": {
               "application/json": {
                 "schema": {
@@ -392,7 +392,7 @@
             }
           },
           "400": {
-            "description": "Неверный ввод",
+            "description": "Invalid input",
             "content": {
               "application/json": {
                 "schema": {
@@ -400,7 +400,7 @@
                   "properties": {
                     "error": {
                       "type": "string",
-                      "example": "Описание ошибки"
+                      "example": "Error description"
                     }
                   }
                 }
@@ -408,10 +408,10 @@
             }
           },
           "403": {
-            "description": "Доступ запрещён"
+            "description": "Access Denied"
           },
           "404": {
-            "description": "Такого урока не существует",
+            "description": "There is no such lesson",
             "content": {
               "application/json": {
                 "schema": {
@@ -419,7 +419,7 @@
                   "properties": {
                     "error": {
                       "type": "string",
-                      "example": "Описание ошибки"
+                      "example": "Error description"
                     }
                   }
                 }
@@ -427,15 +427,15 @@
             }
           },
           "500": {
-            "description": "Ошибка сервера"
+            "description": "Server error"
           }
         }
       }
     },
     "/login": {
       "get": {
-        "summary": "Вход",
-        "description": "Вход по полю и паролю",
+        "summary": "Login",
+        "description": "Login by field and password",
         "operationId": "loginUser",
         "parameters": [
           {
@@ -461,7 +461,7 @@
         ],
         "responses": {
           "201": {
-            "description": "Пользователь успешно вошёл в систему",
+            "description": "The user has successfully logged in.",
             "content": {
               "application/json": {
                 "schema": {
@@ -471,7 +471,7 @@
             }
           },
           "400": {
-            "description": "Неверный ввод",
+            "description": "Invalid input",
             "content": {
               "application/json": {
                 "schema": {
@@ -479,7 +479,7 @@
                   "properties": {
                     "error": {
                       "type": "string",
-                      "example": "Описание ошибки"
+                      "example": "Error description"
                     }
                   }
                 }
@@ -495,7 +495,7 @@
                   "properties": {
                     "error": {
                       "type": "string",
-                      "example": "Описание ошибки"
+                      "example": "Error description"
                     }
                   }
                 }
@@ -503,18 +503,18 @@
             }
           },
           "500": {
-            "description": "Ошибка сервера"
+            "description": "Server error"
           }
         }
       }
     },
     "/register": {
       "post": {
-        "summary": "Регистрация",
-        "description": "Регистрация нового пользователя",
+        "summary": "Registration",
+        "description": "New User Registration",
         "operationId": "registerUser",
         "requestBody": {
-          "description": "Пользовательские данные",
+          "description": "User data",
           "content": {
             "application/json": {
               "schema": {
@@ -525,7 +525,7 @@
         },
         "responses": {
           "201": {
-            "description": "Пользователь успешно зарегистрирован",
+            "description": "User registered successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -535,7 +535,7 @@
             }
           },
           "400": {
-            "description": "Неверный ввод",
+            "description": "Invalid input",
             "content": {
               "application/json": {
                 "schema": {
@@ -543,7 +543,7 @@
                   "properties": {
                     "error": {
                       "type": "string",
-                      "example": "Описание ошибки"
+                      "example": "Error description"
                     }
                   }
                 }
@@ -551,15 +551,15 @@
             }
           },
           "500": {
-            "description": "Ошибка сервера"
+            "description": "Server error"
           }
         }
       }
     },
     "/student": {
       "post": {
-        "summary": "Добавить нового ученика",
-        "description": "Добавляет нового ученика в указанный класс",
+        "summary": "Add new student",
+        "description": "Add new student to the specified class",
         "operationId": "addStudent",
         "tags": [
           "auth",
@@ -589,7 +589,7 @@
         },
         "responses": {
           "201": {
-            "description": "Ученик успешно добавлен в класс",
+            "description": "Student successfully added into class",
             "content": {
               "application/json": {
                 "schema": {
@@ -599,7 +599,7 @@
             }
           },
           "400": {
-            "description": "Неверный ввод",
+            "description": "Invalid input",
             "content": {
               "application/json": {
                 "schema": {
@@ -607,7 +607,7 @@
                   "properties": {
                     "error": {
                       "type": "string",
-                      "example": "Описание ошибки"
+                      "example": "Error description"
                     }
                   }
                 }
@@ -615,18 +615,18 @@
             }
           },
           "403": {
-            "description": "Доступ запрещён"
+            "description": "Access Denied"
           },
           "500": {
-            "description": "Ошибка сервера"
+            "description": "Server error"
           }
         }
       }
     },
     "/students": {
       "get": {
-        "summary": "Получить список учеников",
-        "description": "Получить список всех учеников в указанном классе",
+        "summary": "Get list of students",
+        "description": "Get a list of all students in a specified class",
         "operationId": "getStudents",
         "tags": [
           "auth",
@@ -646,7 +646,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Список учеников успешно получен",
+            "description": "List of students successfully received",
             "content": {
               "application/json": {
                 "schema": {
@@ -656,7 +656,7 @@
             }
           },
           "400": {
-            "description": "Неверный ввод",
+            "description": "Invalid input",
             "content": {
               "application/json": {
                 "schema": {
@@ -664,7 +664,7 @@
                   "properties": {
                     "error": {
                       "type": "string",
-                      "example": "Описание ошибки"
+                      "example": "Error description"
                     }
                   }
                 }
@@ -672,18 +672,18 @@
             }
           },
           "403": {
-            "description": "Доступ запрещён"
+            "description": "Access Denied"
           },
           "500": {
-            "description": "Ошибка сервера"
+            "description": "Server error"
           }
         }
       }
     },
     "/subject": {
       "post": {
-        "summary": "Добавить предмет",
-        "description": "Добавить новый учебный предмет",
+        "summary": "Add item",
+        "description": "Add a new subject",
         "operationId": "subjectAdd",
         "tags": [
           "auth",
@@ -702,7 +702,7 @@
           }
         ],
         "requestBody": {
-          "description": "Параметры предмета",
+          "description": "Item Parameters",
           "content": {
             "application/json": {
               "schema": {
@@ -713,7 +713,7 @@
         },
         "responses": {
           "201": {
-            "description": "Код и ссылка на страницу предмета",
+            "description": "Code and link to the item page",
             "content": {
               "application/json": {
                 "schema": {
@@ -723,7 +723,7 @@
             }
           },
           "400": {
-            "description": "Неверный ввод",
+            "description": "Invalid input",
             "content": {
               "application/json": {
                 "schema": {
@@ -731,7 +731,7 @@
                   "properties": {
                     "error": {
                       "type": "string",
-                      "example": "Описание ошибки"
+                      "example": "Error description"
                     }
                   }
                 }
@@ -739,18 +739,18 @@
             }
           },
           "403": {
-            "description": "Доступ запрещён"
+            "description": "Access Denied"
           },
           "500": {
-            "description": "Ошибка сервера"
+            "description": "Server error"
           }
         }
       }
     },
     "/teacher": {
       "post": {
-        "summary": "Добавить нового учителя",
-        "description": "Добавляет нового учителя в систему",
+        "summary": "Add new teacher",
+        "description": "Adds new teacher into system",
         "operationId": "addTeacher",
         "tags": [
           "auth",
@@ -769,7 +769,7 @@
           }
         ],
         "requestBody": {
-          "description": "Информация о учителе",
+          "description": "Teacher info",
           "content": {
             "application/json": {
               "schema": {
@@ -780,7 +780,7 @@
         },
         "responses": {
           "201": {
-            "description": "Учитель успешно добавлен",
+            "description": "Teacher added",
             "content": {
               "application/json": {
                 "schema": {
@@ -790,7 +790,7 @@
             }
           },
           "400": {
-            "description": "Неверный ввод",
+            "description": "Invalid input",
             "content": {
               "application/json": {
                 "schema": {
@@ -798,7 +798,7 @@
                   "properties": {
                     "error": {
                       "type": "string",
-                      "example": "Описание ошибки"
+                      "example": "Error description"
                     }
                   }
                 }
@@ -806,10 +806,10 @@
             }
           },
           "403": {
-            "description": "Доступ запрещён"
+            "description": "Access Denied"
           },
           "500": {
-            "description": "Ошибка сервера"
+            "description": "Server error"
           }
         }
       }
@@ -822,7 +822,7 @@
         "properties": {
           "description": {
             "type": "string",
-            "example": "8 класс школы такой-то"
+            "example": "8 class"
           },
           "name": {
             "type": "string",
@@ -859,7 +859,7 @@
           },
           "description": {
             "type": "string",
-            "example": "Сложение и вычитание"
+            "example": "Addition and Subtraction"
           },
           "index": {
             "type": "integer",
@@ -871,7 +871,7 @@
           },
           "name": {
             "type": "string",
-            "example": "Математика 1 урок"
+            "example": "Math first lesson"
           },
           "schedule_number": {
             "type": "integer",
@@ -931,11 +931,11 @@
           },
           "first_name": {
             "type": "string",
-            "example": "Иван"
+            "example": "Ivan"
           },
           "last_name": {
             "type": "string",
-            "example": "Иванов"
+            "example": "Ivanov"
           },
           "phone_number": {
             "type": "string",
@@ -1043,13 +1043,13 @@
                 "lesson_id": 1,
                 "grade": 95,
                 "given_at": 10250045,
-                "comment": "Молодец! Активно отвечал и работал на уроке."
+                "comment": "Well done! You answered actively and worked in class."
               },
               {
                 "lesson_id": 2,
                 "grade": 85,
                 "given_at": 10250045,
-                "comment": "Хорошая работа, но можно лучше."
+                "comment": "Good job, but could be better."
               }
             ]
           }
@@ -1076,15 +1076,15 @@
             "example": [
               {
                 "id": 1,
-                "name": "Иван",
-                "lastname": "Иванов",
+                "name": "Ivan",
+                "lastname": "Ivanov",
                 "phone": "+1234566789",
                 "mail": "vlomchetodumat@example.com"
               },
               {
                 "id": 2,
-                "name": "Петр",
-                "lastname": "Петров",
+                "name": "Petr",
+                "lastname": "Petrov",
                 "phone": "+1234566789",
                 "mail": "vlomchetodumat@example.com"
               }
@@ -1097,7 +1097,7 @@
         "properties": {
           "comment": {
             "type": "string",
-            "example": "Молодец! Активно отвечал и работал на уроке."
+            "example": "Well done! You answered actively and worked in class."
           },
           "grade": {
             "type": "integer",
@@ -1152,7 +1152,7 @@
           },
           "name": {
             "type": "string",
-            "example": "Владислав"
+            "example": "Vladislav"
           },
           "password": {
             "type": "string",
@@ -1164,7 +1164,7 @@
           },
           "surname": {
             "type": "string",
-            "example": "Петров"
+            "example": "Petrov"
           }
         }
       },
@@ -1186,7 +1186,7 @@
           },
           "description": {
             "type": "string",
-            "example": "Наука о числах и фигурах"
+            "example": "The Science of Numbers and Shapes"
           },
           "instructor": {
             "type": "integer",
@@ -1199,7 +1199,7 @@
           },
           "name": {
             "type": "string",
-            "example": "Математика"
+            "example": "Mathematics"
           },
           "public": {
             "type": "boolean",
