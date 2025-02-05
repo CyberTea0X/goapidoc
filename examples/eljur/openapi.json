@@ -1,0 +1,1230 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Сервис электронного журнала",
+    "description": "Сервис обеспечивающий работу электронного журнала",
+    "version": "1.0",
+    "license": {
+      "name": "",
+      "url": ""
+    }
+  },
+  "tags": [
+    {
+      "name": "auth",
+      "description": "authentication required"
+    },
+    {
+      "name": "teacher",
+      "description": "teacher role required"
+    },
+    {
+      "name": "admin",
+      "description": "admin role required"
+    }
+  ],
+  "paths": {
+    "/attendance": {
+      "put": {
+        "summary": "Прикрепить посещаемость",
+        "description": "Прикрепляет список посещаемости к уроку. Если для ученика уже была прикреплена посещаемость, то она обновляется",
+        "operationId": "attachAttendance",
+        "tags": [
+          "auth",
+          "teacher"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication parameter",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer \u003ctoken\u003e"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Список записей где указан урок и факт посещения/отсутствия",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/attachAttendanceInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Операция успешно выполнена. Возвращать результат смысла нет."
+          },
+          "400": {
+            "description": "Неверный ввод",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Описание ошибки"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Доступ запрещён"
+          },
+          "500": {
+            "description": "Ошибка сервера"
+          }
+        }
+      }
+    },
+    "/class": {
+      "post": {
+        "summary": "Add new class",
+        "description": "Adds new class",
+        "operationId": "addClass",
+        "tags": [
+          "auth"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication parameter",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer \u003ctoken\u003e"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Class info",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/addClassInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Класс успешно добавлен",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/addClassOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Неверный ввод",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Описание ошибки"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Ошибка сервера"
+          }
+        }
+      }
+    },
+    "/grade": {
+      "post": {
+        "summary": "Поставить оценку",
+        "description": "Поставить оценку",
+        "operationId": "giveGrade",
+        "tags": [
+          "auth",
+          "teacher"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication parameter",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer \u003ctoken\u003e"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Описание оценки"
+        },
+        "responses": {
+          "201": {
+            "description": "Оценка поставлена. given_at это unix дата когда она была выставлена, возвращается",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "given_at": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 10250045
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Неверный ввод",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Описание ошибки"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Доступ запрещён"
+          },
+          "500": {
+            "description": "Ошибка сервера"
+          }
+        }
+      }
+    },
+    "/grades": {
+      "get": {
+        "summary": "Получить оценки",
+        "description": "Получить список оценок студента. given_at вместе с id урока определяет отдельную оценку. given_at это дата в формате unix",
+        "operationId": "getGrades",
+        "tags": [
+          "auth",
+          "student",
+          "teacher"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication parameter",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer \u003ctoken\u003e"
+            }
+          },
+          {
+            "name": "student_id",
+            "in": "query",
+            "description": "id студента",
+            "required": true,
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Список оценок успешно получен",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getGradesOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Неверный ввод",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Описание ошибки"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Доступ запрещён"
+          },
+          "500": {
+            "description": "Ошибка сервера"
+          }
+        }
+      }
+    },
+    "/lesson": {
+      "post": {
+        "summary": "Create new lesson",
+        "description": "Create new lesson",
+        "operationId": "createLesson",
+        "tags": [
+          "auth",
+          "teacher"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication parameter",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer \u003ctoken\u003e"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Информация о уроке",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/addLessonInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Урок успешно добавлен",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/addLessonOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Неверный ввод",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Описание ошибки"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Доступ запрещён"
+          },
+          "409": {
+            "description": "Конфликт с другим ресурсом"
+          },
+          "500": {
+            "description": "Ошибка сервера"
+          }
+        }
+      }
+    },
+    "/lesson/attach-files": {
+      "post": {
+        "summary": "Attach files to lesson",
+        "description": "Attach files to a specific lesson",
+        "operationId": "attachFilesToLesson",
+        "tags": [
+          "auth",
+          "teacher"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication parameter",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer \u003ctoken\u003e"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Файлы для прикрепления к уроку",
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/attachFilesInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Файлы успешно прикреплены к уроку",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/attachFilesOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Неверный ввод",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Описание ошибки"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Доступ запрещён"
+          },
+          "404": {
+            "description": "Такого урока не существует",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Описание ошибки"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Ошибка сервера"
+          }
+        }
+      }
+    },
+    "/login": {
+      "get": {
+        "summary": "Вход",
+        "description": "Вход по полю и паролю",
+        "operationId": "loginUser",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "43124589"
+            }
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "vladikkrutoymalchik2008"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Пользователь успешно вошёл в систему",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/loginOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Неверный ввод",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Описание ошибки"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Wrong password or login",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Описание ошибки"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Ошибка сервера"
+          }
+        }
+      }
+    },
+    "/register": {
+      "post": {
+        "summary": "Регистрация",
+        "description": "Регистрация нового пользователя",
+        "operationId": "registerUser",
+        "requestBody": {
+          "description": "Пользовательские данные",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/registerInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Пользователь успешно зарегистрирован",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/registerOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Неверный ввод",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Описание ошибки"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Ошибка сервера"
+          }
+        }
+      }
+    },
+    "/student": {
+      "post": {
+        "summary": "Добавить нового ученика",
+        "description": "Добавляет нового ученика в указанный класс",
+        "operationId": "addStudent",
+        "tags": [
+          "auth",
+          "teacher"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication parameter",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer \u003ctoken\u003e"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "student info",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/addStudentInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ученик успешно добавлен в класс",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/addStudentOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Неверный ввод",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Описание ошибки"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Доступ запрещён"
+          },
+          "500": {
+            "description": "Ошибка сервера"
+          }
+        }
+      }
+    },
+    "/students": {
+      "get": {
+        "summary": "Получить список учеников",
+        "description": "Получить список всех учеников в указанном классе",
+        "operationId": "getStudents",
+        "tags": [
+          "auth",
+          "teacher"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication parameter",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer \u003ctoken\u003e"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Список учеников успешно получен",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getStudentsOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Неверный ввод",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Описание ошибки"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Доступ запрещён"
+          },
+          "500": {
+            "description": "Ошибка сервера"
+          }
+        }
+      }
+    },
+    "/subject": {
+      "post": {
+        "summary": "Добавить предмет",
+        "description": "Добавить новый учебный предмет",
+        "operationId": "subjectAdd",
+        "tags": [
+          "auth",
+          "teacher"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication parameter",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer \u003ctoken\u003e"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Параметры предмета",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/subjectAddInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Код и ссылка на страницу предмета",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/subjectAddOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Неверный ввод",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Описание ошибки"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Доступ запрещён"
+          },
+          "500": {
+            "description": "Ошибка сервера"
+          }
+        }
+      }
+    },
+    "/teacher": {
+      "post": {
+        "summary": "Добавить нового учителя",
+        "description": "Добавляет нового учителя в систему",
+        "operationId": "addTeacher",
+        "tags": [
+          "auth",
+          "admin"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authentication parameter",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer \u003ctoken\u003e"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Информация о учителе",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/addTeacherInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Учитель успешно добавлен",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/addTeacherOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Неверный ввод",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Описание ошибки"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Доступ запрещён"
+          },
+          "500": {
+            "description": "Ошибка сервера"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "addClassInput": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "example": "8 класс школы такой-то"
+          },
+          "name": {
+            "type": "string",
+            "example": "8-A"
+          },
+          "teacher_id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 542
+          }
+        }
+      },
+      "addClassOutput": {
+        "type": "object",
+        "properties": {
+          "class_id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 142
+          }
+        }
+      },
+      "addLessonInput": {
+        "type": "object",
+        "properties": {
+          "class_id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 1
+          },
+          "date": {
+            "type": "string",
+            "example": "2023-10-15"
+          },
+          "description": {
+            "type": "string",
+            "example": "Сложение и вычитание"
+          },
+          "index": {
+            "type": "integer",
+            "example": 1
+          },
+          "is_online": {
+            "type": "boolean",
+            "example": true
+          },
+          "name": {
+            "type": "string",
+            "example": "Математика 1 урок"
+          },
+          "schedule_number": {
+            "type": "integer",
+            "example": 1
+          },
+          "subject_id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 1
+          },
+          "teacher_id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 1
+          }
+        }
+      },
+      "addLessonOutput": {
+        "type": "object",
+        "properties": {
+          "lesson_id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 1
+          }
+        }
+      },
+      "addStudentInput": {
+        "type": "object",
+        "properties": {
+          "class_id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 415
+          }
+        }
+      },
+      "addStudentOutput": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": "14843928"
+          },
+          "password": {
+            "type": "string",
+            "example": "vladikbrutal2009"
+          }
+        }
+      },
+      "addTeacherInput": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "ivan.ivanov@school.com"
+          },
+          "first_name": {
+            "type": "string",
+            "example": "Иван"
+          },
+          "last_name": {
+            "type": "string",
+            "example": "Иванов"
+          },
+          "phone_number": {
+            "type": "string",
+            "example": "+79123456789"
+          },
+          "subject_ids": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "example": [
+              101,
+              102
+            ]
+          }
+        }
+      },
+      "addTeacherOutput": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": "teacher123"
+          },
+          "password": {
+            "type": "string",
+            "example": "securepassword123"
+          },
+          "teacher_id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 123
+          }
+        }
+      },
+      "attachAttendanceInput": {
+        "type": "object",
+        "properties": {
+          "attendance": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            },
+            "example": [
+              {
+                "student_id": 1,
+                "presence": true
+              },
+              {
+                "student_id": 2,
+                "presence": true
+              },
+              {
+                "student_id": 2,
+                "presence": false
+              }
+            ]
+          },
+          "lesson_id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 1
+          }
+        }
+      },
+      "attachFilesInput": {
+        "type": "object",
+        "properties": {
+          "files": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "file1.pdf",
+              "file2.jpg"
+            ]
+          },
+          "lesson_id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 1
+          }
+        }
+      },
+      "attachFilesOutput": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          }
+        }
+      },
+      "getGradesOutput": {
+        "type": "object",
+        "properties": {
+          "grades": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            },
+            "example": [
+              {
+                "lesson_id": 1,
+                "grade": 95,
+                "given_at": 10250045,
+                "comment": "Молодец! Активно отвечал и работал на уроке."
+              },
+              {
+                "lesson_id": 2,
+                "grade": 85,
+                "given_at": 10250045,
+                "comment": "Хорошая работа, но можно лучше."
+              }
+            ]
+          }
+        }
+      },
+      "getStudentsInput": {
+        "type": "object",
+        "properties": {
+          "class_id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 415
+          }
+        }
+      },
+      "getStudentsOutput": {
+        "type": "object",
+        "properties": {
+          "students": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            },
+            "example": [
+              {
+                "id": 1,
+                "name": "Иван",
+                "lastname": "Иванов",
+                "phone": "+1234566789",
+                "mail": "vlomchetodumat@example.com"
+              },
+              {
+                "id": 2,
+                "name": "Петр",
+                "lastname": "Петров",
+                "phone": "+1234566789",
+                "mail": "vlomchetodumat@example.com"
+              }
+            ]
+          }
+        }
+      },
+      "giveGradeInput": {
+        "type": "object",
+        "properties": {
+          "comment": {
+            "type": "string",
+            "example": "Молодец! Активно отвечал и работал на уроке."
+          },
+          "grade": {
+            "type": "integer",
+            "format": "int64",
+            "example": 95
+          },
+          "lesson_id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 1
+          },
+          "student_id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 1
+          }
+        }
+      },
+      "loginOutput": {
+        "type": "object",
+        "properties": {
+          "access_expires_at": {
+            "type": "integer",
+            "format": "int64",
+            "example": 1738677032
+          },
+          "access_token": {
+            "type": "string",
+            "example": "thisis.access.token"
+          },
+          "refresh_expires_at": {
+            "type": "integer",
+            "format": "int64",
+            "example": 1738677032
+          },
+          "refresh_token": {
+            "type": "string",
+            "example": "thisis.refresh.token"
+          }
+        }
+      },
+      "registerInput": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": "43124589"
+          },
+          "mail": {
+            "type": "string",
+            "example": "vladikdetskysadic@example.com"
+          },
+          "name": {
+            "type": "string",
+            "example": "Владислав"
+          },
+          "password": {
+            "type": "string",
+            "example": "vladikkrutoymalchik2008"
+          },
+          "phone": {
+            "type": "string",
+            "example": ""
+          },
+          "surname": {
+            "type": "string",
+            "example": "Петров"
+          }
+        }
+      },
+      "registerOutput": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "43124589"
+          }
+        }
+      },
+      "subjectAddInput": {
+        "type": "object",
+        "properties": {
+          "capacity": {
+            "type": "integer",
+            "example": 30
+          },
+          "description": {
+            "type": "string",
+            "example": "Наука о числах и фигурах"
+          },
+          "instructor": {
+            "type": "integer",
+            "format": "int64",
+            "example": 13
+          },
+          "is_active": {
+            "type": "boolean",
+            "example": true
+          },
+          "name": {
+            "type": "string",
+            "example": "Математика"
+          },
+          "public": {
+            "type": "boolean",
+            "example": true
+          },
+          "requires_group": {
+            "type": "string",
+            "example": "9 класс"
+          }
+        }
+      },
+      "subjectAddOutput": {
+        "type": "object",
+        "properties": {
+          "subject_code": {
+            "type": "integer",
+            "format": "int64",
+            "example": 1341
+          },
+          "url": {
+            "type": "string",
+            "example": "http://example.com/subjects/1341"
+          }
+        }
+      }
+    }
+  }
+}
