@@ -243,6 +243,14 @@ type Content struct {
 	Json        *ContentSchema `json:"application/json,omitempty"`
 	OctetStream *ContentSchema `json:"application/octet-stream,omitempty"`
 	ImagePng    *ContentSchema `json:"image/png,omitempty"`
+	ImageJpeg   *ContentSchema `json:"image/jpeg,omitempty"`
+	ImageGif    *ContentSchema `json:"image/gif,omitempty"`
+	TextPlain   *ContentSchema `json:"text/plain,omitempty"`
+	TextHtml    *ContentSchema `json:"text/html,omitempty"`
+	Xml         *ContentSchema `json:"application/xml,omitempty"`
+	Pdf         *ContentSchema `json:"application/pdf,omitempty"`
+	Zip         *ContentSchema `json:"application/zip,omitempty"`
+	FormData    *ContentSchema `json:"multipart/form-data,omitempty"`
 }
 
 type Schema struct {
