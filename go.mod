@@ -1,3 +1,3 @@
 module github.com/cybertea0x/goapidoc
 
-go 1.23.5
+go 1.23.6
