@@ -1,8 +1,7 @@
 package document
 
 import (
-	"github.com/cybertea0x/goapidoc"
-	oapi "github.com/cybertea0x/goapidoc"
+	oapi "github.com/CyberTea0X/goapidoc"
 )
 
 type Route struct {
@@ -21,8 +20,8 @@ var authParameter = oapi.Parameter{
 	In:          "header",
 	Description: "Authentication parameter",
 	Required:    true,
-	Schema: goapidoc.Schema{
-		Type:    goapidoc.String,
+	Schema: oapi.Schema{
+		Type:    oapi.String,
 		Example: "Bearer <token>",
 	},
 }

@@ -1,6 +1,6 @@
 package document
 
-import "github.com/cybertea0x/goapidoc"
+import "github.com/CyberTea0X/goapidoc"
 
 type attachFilesInput struct {
 	LessonId int64    `form:"lesson_id,required"` // Идентификатор урока, к которому прикрепляются файлы

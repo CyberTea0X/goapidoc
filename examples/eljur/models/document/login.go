@@ -1,6 +1,6 @@
 package document
 
-import "github.com/cybertea0x/goapidoc"
+import "github.com/CyberTea0X/goapidoc"
 
 type loginInput struct {
 	Code     string `json:"code,required"`

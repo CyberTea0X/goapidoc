@@ -1,6 +1,6 @@
 package document
 
-import "github.com/cybertea0x/goapidoc"
+import "github.com/CyberTea0X/goapidoc"
 
 type addStudentInput struct {
 	ClassId int64 `json:"class_id,required"`

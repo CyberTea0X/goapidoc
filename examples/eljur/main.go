@@ -1,7 +1,7 @@
 package main
 
 import (
-	"backend/models/document"
+	"eljur/models/document"
 	"flag"
 )
 
