@@ -1,7 +1,5 @@
 package document
 
-import "github.com/cybertea0x/goapidoc"
-
 type addLessonInput struct {
 	Index          int    `json:"index,required"`
 	Name           string `json:"name,required"`
@@ -20,21 +18,21 @@ type addLessonOutput struct {
 
 var addLessonRoute = Route{
 	Name: "/lesson",
-	Path: goapidoc.Path{
-		Post: &goapidoc.Method{
+	Path: CyberTea0X.Path{
+		Post: &CyberTea0X.Method{
 			Summary:     "Create new lesson",
 			Description: "Create new lesson",
 			OperationId: "createLesson",
 			Tags:        []string{"auth", "teacher"},
-			Parameters:  []goapidoc.Parameter{authParameter},
-			RequestBody: &goapidoc.RequestBody{
+			Parameters:  []CyberTea0X.Parameter{authParameter},
+			RequestBody: &CyberTea0X.RequestBody{
 				Description: "Lesson info",
-				Content:     goapidoc.ContentJsonSchemaRef(addLessonInput{}),
+				Content:     CyberTea0X.ContentJsonSchemaRef(addLessonInput{}),
 			},
-			Responses: map[string]goapidoc.Response{
+			Responses: map[string]CyberTea0X.Response{
 				"201": {
 					Description: "Lesson successfully added",
-					Content:     goapidoc.ContentJsonSchemaRef(addLessonOutput{}),
+					Content:     CyberTea0X.ContentJsonSchemaRef(addLessonOutput{}),
 				},
 				"400": Response400,
 				"403": Response403,
@@ -43,8 +41,8 @@ var addLessonRoute = Route{
 			},
 		},
 	},
-	Components: goapidoc.Components{
-		Schemas: goapidoc.SchemasOf(
+	Components: CyberTea0X.Components{
+		Schemas: CyberTea0X.SchemasOf(
 			addLessonInput{
 				Index:          1,
 				Name:           "Math first lesson",
