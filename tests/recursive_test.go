@@ -15,10 +15,7 @@ func TestRecursive(t *testing.T) {
 		Pet Pet
 	}
 	u := User{Pet: Pet{Age: 1}}
-	schema, err := goapidoc.SchemaFrom(u)
-	if err != nil {
-		t.Error(err)
-	}
+	schema := goapidoc.SchemaFrom(u)
 	raw, err := json.Marshal(schema)
 	if err != nil {
 		t.Error(err)
