@@ -48,7 +48,7 @@ func main() {
 							In:          "query",
 							Description: "How many items to return at one time (max 100)",
 							Required:    false,
-							Schema:      oapi.MustBuildSchemaFrom(int32(1)),
+							Schema:      oapi.SchemaFrom(int32(1)),
 						},
 					},
 					Responses: map[string]oapi.Response{
