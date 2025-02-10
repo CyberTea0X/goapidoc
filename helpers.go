@@ -2,7 +2,6 @@ package goapidoc
 
 import (
 	"errors"
-	"log"
 	"reflect"
 	"strings"
 )
@@ -113,17 +112,17 @@ func SchemaFromStruct(value any) (Schema, error) {
 		var fieldSchema Schema
 		if fValue.Type().Kind() == reflect.Struct && fValue.Type().Name() != "Time" {
 			var err error
-			example, err := SchemaFrom(fValue.Interface())
+			example, err := schemaFrom(fValue.Interface())
 			if err != nil {
 				return Schema{}, err
 			}
 			fieldSchema = Schema{Type: "object", Properties: example.Properties}
 		} else {
+
 			var err error
-			fieldSchema, err = SchemaFrom(fValue.Interface())
+			fieldSchema, err = schemaFrom(fValue.Interface())
 			if err != nil {
-				log.Println("failed to generate schema from " + fValue.Type().String())
-				continue
+				return Schema{}, errors.New("failed to generate schema from " + fValue.Type().String())
 			}
 		}
 		properties[propertyName] = fieldSchema
@@ -140,14 +139,6 @@ func SchemaFromStruct(value any) (Schema, error) {
 		Type:       "object",
 		Properties: properties,
 	}, nil
-}
-
-func MustBuildSchemaFrom(value any) Schema {
-	schema, err := SchemaFrom(value)
-	if err != nil {
-		panic(err)
-	}
-	return schema
 }
 
 func SchemaFromSlice(value any) (Schema, error) {
@@ -184,7 +175,7 @@ func SchemaFromPrimitive(value any) (Schema, error) {
 	}, nil
 }
 
-func SchemaFrom(value any) (Schema, error) {
+func schemaFrom(value any) (Schema, error) {
 	t := reflect.TypeOf(value)
 	switch t.Kind() {
 	case reflect.Struct:
@@ -194,6 +185,14 @@ func SchemaFrom(value any) (Schema, error) {
 	default:
 		return SchemaFromPrimitive(value)
 	}
+}
+
+func SchemaFrom(value any) Schema {
+	schema, err := schemaFrom(value)
+	if err != nil {
+		panic(err)
+	}
+	return schema
 }
 
 func ArrayOf(schema Schema) Schema {

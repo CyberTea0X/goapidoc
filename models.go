@@ -24,7 +24,7 @@ func (s Schemas) addSchema(value any) error {
 	if exists {
 		return nil
 	}
-	s[schemaName], err = SchemaFrom(value)
+	s[schemaName], err = schemaFrom(value)
 	if err != nil {
 		return err
 	}
@@ -260,4 +260,9 @@ type Schema struct {
 	Properties map[string]any `json:"properties,omitempty"`
 	Ref        string         `json:"$ref,omitempty"`
 	Example    any            `json:"example,omitempty"`
+}
+
+func (s Schema) WithExample(example any) Schema {
+	s.Example = example
+	return s
 }
