@@ -266,3 +266,8 @@ func (s Schema) WithExample(example any) Schema {
 	s.Example = example
 	return s
 }
+
+func (s Schema) WithFormat(format string) Schema {
+	s.Format = format
+	return s
+}
