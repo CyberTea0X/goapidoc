@@ -1,6 +1,7 @@
 package document
 
 import (
+	"github.com/CyberTea0X/goapidoc"
 	oapi "github.com/CyberTea0X/goapidoc"
 )
 
@@ -20,8 +21,8 @@ var authParameter = oapi.Parameter{
 	In:          "header",
 	Description: "Authentication parameter",
 	Required:    true,
-	Schema: oapi.Schema{
-		Type:    oapi.String,
+	Schema: goapidoc.Schema{
+		Type:    goapidoc.String,
 		Example: "Bearer <token>",
 	},
 }

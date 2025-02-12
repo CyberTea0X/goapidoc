@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/cybertea0x/goapidoc"
+	"github.com/CyberTea0X/goapidoc"
 )
 
 func TestRecursive(t *testing.T) {
