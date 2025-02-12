@@ -5,21 +5,23 @@ This is a simple and fast library for writing OpenAPI specification in Go.
 ## Import
 
 ```go
-import "github.com/cybertea0x/goapidoc"
+import "github.com/CyberTea0X/goapidoc"
 ```
 
 or
 
 ```bash
-go get github.com/cybertea0x/goapidoc
+go get github.com/CyberTea0X/goapidoc
 ```
 
 ## Main features
 
  - Typesafety
  - Struct to component conversion
+ - Make refs to schemas
  - Write examples as golang structs
  - Supports openapi v 3.1.0
+ - Write about 2 times less code than in json
 
 ## Examples
 
