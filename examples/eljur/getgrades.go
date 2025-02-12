@@ -1,4 +1,4 @@
-package document
+package main
 
 import "github.com/CyberTea0X/goapidoc"
 

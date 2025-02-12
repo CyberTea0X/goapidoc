@@ -1,4 +1,4 @@
-package document
+package main
 
 import "github.com/CyberTea0X/goapidoc"
 
@@ -28,7 +28,7 @@ var giveGradeRoute = Route{
 			Responses: map[string]goapidoc.Response{
 				"201": *goapidoc.NewResponse(
 					"The rating has been set. given_at is the unix date when it was set, returned",
-					goapidoc.MustBuildSchemaFrom(giveGradeOutput{GivenAt: UnixDateExample}),
+					goapidoc.SchemaFrom(giveGradeOutput{GivenAt: UnixDateExample}),
 				),
 				"400": Response400,
 				"403": Response403,
