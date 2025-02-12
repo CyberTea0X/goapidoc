@@ -3,127 +3,7 @@ package goapidoc
 import (
 	"encoding/json"
 	"os"
-	"reflect"
 )
-
-type Schemas map[string]Schema
-
-func (s Schemas) Merge(s2 Schemas) {
-	for key := range s2 {
-		value, exists := s2[key]
-		if exists {
-			s[key] = value
-		}
-	}
-}
-
-func (s Schemas) addSchema(value any) error {
-	var err error
-	schemaName := oapiSchemaName(value)
-	_, exists := s[schemaName]
-	if exists {
-		return nil
-	}
-	s[schemaName], err = schemaFrom(value)
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func (s Schemas) addSchemas(schemas ...any) []error {
-	errs := make([]error, len(schemas))
-	for i, value := range schemas {
-		errs[i] = s.addSchema(value)
-	}
-	return errs
-}
-
-func NewResponse(description string, schema Schema) *Response {
-	return &Response{
-		Description: description,
-		Content: &Content{
-			Json: &ContentSchema{
-				Schema: schema,
-			},
-		},
-	}
-}
-
-type OapiType string
-
-const (
-	Integer OapiType = "integer"
-	Boolean OapiType = "boolean"
-	Number  OapiType = "number"
-	String  OapiType = "string"
-	Object  OapiType = "object"
-	Array   OapiType = "array"
-)
-
-func toOapiType(t reflect.Type) OapiType {
-	switch t.Kind() {
-	case reflect.Int:
-		return Integer
-	case reflect.Int32:
-		return Integer
-	case reflect.Int64:
-		return Integer
-	case reflect.Uint:
-		return Integer
-	case reflect.Uint64:
-		return Integer
-	case reflect.Uint32:
-		return Integer
-	case reflect.Bool:
-		return Boolean
-	case reflect.Float64:
-		return Number
-	case reflect.Float32:
-		return Number
-	case reflect.String:
-		return String
-	case reflect.Slice:
-		return Array
-	case reflect.Struct:
-		if t.Name() == "Time" {
-			return String
-		}
-		return Object
-	}
-	panic("unhandled type: " + t.String())
-}
-
-// Some binary file like image.png
-var BinaryFile = ContentSchema{
-	Schema: Schema{
-		Type:   String,
-		Format: "binary",
-	},
-}
-
-// Document Info
-type Info struct {
-	Title       string            `json:"title,omitempty"`
-	Description string            `json:"description,omitempty"`
-	Version     string            `json:"version,omitempty"`
-	Contact     map[string]string `json:"contact,omitempty"`
-	License     *License          `json:"license,omitempty"`
-}
-
-// Document license
-type License struct {
-	Name string `json:"name"`
-	Url  string `json:"url"`
-}
-
-type Components struct {
-	Schemas Schemas `json:"schemas,omitempty"`
-}
-
-type Server struct {
-	Url string `json:"url"`
-}
 
 type Document struct {
 	OpenApiVersion string          `json:"openapi"`
@@ -161,6 +41,29 @@ func (d *Document) AddPath(route string, newpath Path) {
 		newpath.Merge(path)
 	}
 	d.Paths[route] = newpath
+}
+
+// Document Info
+type Info struct {
+	Title       string            `json:"title,omitempty"`
+	Description string            `json:"description,omitempty"`
+	Version     string            `json:"version,omitempty"`
+	Contact     map[string]string `json:"contact,omitempty"`
+	License     *License          `json:"license,omitempty"`
+}
+
+// Document license
+type License struct {
+	Name string `json:"name"`
+	Url  string `json:"url"`
+}
+
+type Components struct {
+	Schemas Schemas `json:"schemas,omitempty"`
+}
+
+type Server struct {
+	Url string `json:"url"`
 }
 
 type Tag struct {
@@ -253,21 +156,21 @@ type Content struct {
 	FormData    *ContentSchema `json:"multipart/form-data,omitempty"`
 }
 
-type Schema struct {
-	Type       OapiType       `json:"type,omitempty"`
-	Format     string         `json:"format,omitempty"`
-	Items      *Schema        `json:"items,omitempty"`
-	Properties map[string]any `json:"properties,omitempty"`
-	Ref        string         `json:"$ref,omitempty"`
-	Example    any            `json:"example,omitempty"`
+func NewResponse(description string, schema Schema) *Response {
+	return &Response{
+		Description: description,
+		Content: &Content{
+			Json: &ContentSchema{
+				Schema: schema,
+			},
+		},
+	}
 }
 
-func (s Schema) WithExample(example any) Schema {
-	s.Example = example
-	return s
-}
-
-func (s Schema) WithFormat(format string) Schema {
-	s.Format = format
-	return s
+// Some binary file like image.png
+var BinaryFile = ContentSchema{
+	Schema: Schema{
+		Type:   String,
+		Format: "binary",
+	},
 }
