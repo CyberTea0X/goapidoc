@@ -26,7 +26,7 @@ var giveGradeRoute = Route{
 				Description: "Rate this",
 			},
 			Responses: map[string]goapidoc.Response{
-				"201": *goapidoc.NewResponse(
+				"201": goapidoc.ResponseWithJson(
 					"The rating has been set. given_at is the unix date when it was set, returned",
 					goapidoc.SchemaFrom(giveGradeOutput{GivenAt: UnixDateExample}),
 				),

@@ -24,8 +24,8 @@ var loginRoute = Route{
 			Tags:        []string{},
 			Parameters:  goapidoc.ParametersFromStruct(loginInput{Code: "43124589", Password: "vladikkrutoymalchik2008"}, "query"),
 			Responses: map[string]goapidoc.Response{
-				"201": *goapidoc.NewResponse("The user has successfully logged in.", goapidoc.GetSchemaRef(loginOutput{})),
-				"401": *goapidoc.NewResponse("Wrong password or login", errorSchema),
+				"201": goapidoc.ResponseWithJson("The user has successfully logged in.", goapidoc.Ref(loginOutput{})),
+				"401": goapidoc.ResponseWithJson("Wrong password or login", errorSchema),
 				"400": Response400,
 				"500": Response500,
 			},

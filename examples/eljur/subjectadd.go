@@ -26,9 +26,9 @@ var subjectAddRoute = Route{
 			OperationId: "subjectAdd",
 			Tags:        []string{"auth", "teacher"},
 			Parameters:  []goapidoc.Parameter{authParameter},
-			RequestBody: goapidoc.NewRequestBody("Item Parameters", goapidoc.ContentJsonSchemaRef(subjectAddInput{})),
+			RequestBody: goapidoc.RequestWithJson("Item Parameters", goapidoc.Ref(subjectAddInput{})),
 			Responses: map[string]goapidoc.Response{
-				"201": *goapidoc.NewResponse("Code and link to the item page", goapidoc.GetSchemaRef(subjectAddOutput{})),
+				"201": goapidoc.ResponseWithJson("Code and link to the item page", goapidoc.Ref(subjectAddOutput{})),
 				"400": Response400,
 				"403": Response403,
 				"500": Response500,

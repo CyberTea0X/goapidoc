@@ -202,28 +202,12 @@ func ArrayOf(schema Schema) Schema {
 	}
 }
 
-func GetSchemaRef(value any) Schema {
+func Ref(value any) Schema {
 	return Schema{
 		Ref: "#/components/schemas/" + oapiSchemaName(value),
 	}
 }
 
-func ContentJsonSchemaRef(value any) *Content {
-	return &Content{
-		Json: &ContentSchema{
-			Schema: GetSchemaRef(value),
-		},
-	}
-}
-
 func oapiSchemaName(value any) string {
 	return reflect.ValueOf(value).Type().Name()
-}
-
-// content is an empty struct witch works as a referense to a schema
-func ResponseFromRef(description string, content any) Response {
-	return Response{
-		Description: description,
-		Content:     ContentJsonSchemaRef(content),
-	}
 }

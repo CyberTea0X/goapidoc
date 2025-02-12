@@ -49,11 +49,11 @@ var infoOk = oapi.Schema{
 var Response200Empty = oapi.Response{Description: "The operation was completed successfully. There is no point in returning the result."}
 var Response201Empty = oapi.Response{Description: "The resource has been successfully created. There is no point in returning it."}
 var Response204 = oapi.Response{Description: "No content"}
-var Response400 = *oapi.NewResponse("Invalid input", errorSchema)
+var Response400 = oapi.ResponseWithJson("Invalid input", errorSchema)
 var Response403 = oapi.Response{Description: "Access Denied"}
 var Response409 = oapi.Response{Description: "Conflict with another resource"}
 var Response500 = oapi.Response{Description: "Server error"}
-var InfoResponse = *oapi.NewResponse("Operation successful. Json contains info with additional information", infoOk)
+var InfoResponse = oapi.ResponseWithJson("Operation successful. Json contains info with additional information", infoOk)
 var UnixDateExample = int64(10250045)
 
 func BuildDocument() *oapi.Document {

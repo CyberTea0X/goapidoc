@@ -129,13 +129,25 @@ type Response struct {
 	Content     *Content          `json:"content,omitempty"`
 }
 
+func (r Response) WithHeaders(headers map[string]Header) Response {
+	r.Headers = headers
+	return r
+}
+
 type RequestBody struct {
 	Description string   `json:"description,omitempty"`
 	Content     *Content `json:"content,omitempty"`
 }
 
-func NewRequestBody(description string, content *Content) *RequestBody {
-	return &RequestBody{Description: description, Content: content}
+func RequestWithJson(description string, schema Schema) *RequestBody {
+	return &RequestBody{
+		Description: description,
+		Content: &Content{
+			Json: &ContentSchema{
+				Schema: schema,
+			},
+		},
+	}
 }
 
 type ContentSchema struct {
@@ -156,8 +168,8 @@ type Content struct {
 	FormData    *ContentSchema `json:"multipart/form-data,omitempty"`
 }
 
-func NewResponse(description string, schema Schema) *Response {
-	return &Response{
+func ResponseWithJson(description string, schema Schema) Response {
+	return Response{
 		Description: description,
 		Content: &Content{
 			Json: &ContentSchema{

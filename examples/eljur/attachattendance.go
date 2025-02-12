@@ -21,10 +21,10 @@ var attachAttendanceRoute = Route{
 			OperationId: "attachAttendance",
 			Tags:        []string{"auth", "teacher"},
 			Parameters:  []goapidoc.Parameter{authParameter},
-			RequestBody: &goapidoc.RequestBody{
-				Description: "List of records where the lesson and the fact of attendance/absence are indicated",
-				Content:     goapidoc.ContentJsonSchemaRef(attachAttendanceInput{}),
-			},
+			RequestBody: goapidoc.RequestWithJson(
+				"List of records where the lesson and the fact of attendance/absence are indicated",
+				goapidoc.Ref(attachAttendanceInput{}),
+			),
 			Responses: map[string]goapidoc.Response{
 				"200": Response200Empty,
 				"400": Response400,

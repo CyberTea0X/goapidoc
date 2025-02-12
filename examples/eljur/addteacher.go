@@ -25,15 +25,9 @@ var addTeacherRoute = Route{
 			OperationId: "addTeacher",
 			Tags:        []string{"auth", "admin"},
 			Parameters:  []goapidoc.Parameter{authParameter},
-			RequestBody: &goapidoc.RequestBody{
-				Description: "Teacher info",
-				Content:     goapidoc.ContentJsonSchemaRef(addTeacherInput{}),
-			},
+			RequestBody: goapidoc.RequestWithJson("Teacher info", goapidoc.Ref(addTeacherInput{})),
 			Responses: map[string]goapidoc.Response{
-				"201": {
-					Description: "Teacher added",
-					Content:     goapidoc.ContentJsonSchemaRef(addTeacherOutput{}),
-				},
+				"201": goapidoc.ResponseWithJson("Teacher added", goapidoc.Ref(addTeacherOutput{})),
 				"400": Response400,
 				"403": Response403,
 				"500": Response500,

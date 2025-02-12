@@ -28,10 +28,7 @@ var getStudentsRoute = Route{
 			Tags:        []string{"auth", "teacher"},
 			Parameters:  []goapidoc.Parameter{authParameter},
 			Responses: map[string]goapidoc.Response{
-				"200": {
-					Description: "List of students successfully received",
-					Content:     goapidoc.ContentJsonSchemaRef(getStudentsOutput{}),
-				},
+				"200": goapidoc.ResponseWithJson("List of students successfully received", goapidoc.Ref(getStudentsOutput{})),
 				"400": Response400,
 				"403": Response403,
 				"500": Response500,

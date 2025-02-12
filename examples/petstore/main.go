@@ -17,10 +17,7 @@ type Error struct {
 	Message string `json:"message" binding:"required"`
 }
 
-var DefaultResponse = oapi.Response{
-	Description: "unexpected error",
-	Content:     oapi.ContentJsonSchemaRef(Error{}),
-}
+var DefaultResponse = oapi.ResponseWithJson("unexpected error", oapi.Ref(Error{}))
 
 func main() {
 	doc := oapi.Document{
@@ -52,18 +49,15 @@ func main() {
 						},
 					},
 					Responses: map[string]oapi.Response{
-						"200": {
-							Description: "A paged array of pets",
-							Headers: map[string]oapi.Header{
-								"x-next": {
-									Description: "A link to the next page of responses",
-									Schema: oapi.Schema{
-										Type: oapi.String,
-									},
+						"200": oapi.ResponseWithJson("A paged array of pets", oapi.Ref(Pets{})).WithHeaders(
+							map[string]oapi.Header{"x-next": {
+								Description: "A link to the next page of responses",
+								Schema: oapi.Schema{
+									Type: oapi.String,
 								},
 							},
-							Content: oapi.ContentJsonSchemaRef(Pets{}),
-						},
+							},
+						),
 						"default": DefaultResponse,
 					},
 				},
@@ -94,10 +88,7 @@ func main() {
 						},
 					},
 					Responses: map[string]oapi.Response{
-						"200": {
-							Description: "Expected response to a valid request",
-							Content:     oapi.ContentJsonSchemaRef(Pet{}),
-						},
+						"200":     oapi.ResponseWithJson("Expected response to a valid request", oapi.Ref(Pet{})),
 						"default": DefaultResponse,
 					},
 				},

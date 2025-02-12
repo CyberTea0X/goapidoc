@@ -24,18 +24,15 @@ var attachFilesRoute = Route{
 				Description: "Files to attach to the lesson",
 				Content: &goapidoc.Content{
 					FormData: &goapidoc.ContentSchema{
-						Schema: goapidoc.GetSchemaRef(attachFilesInput{}),
+						Schema: goapidoc.Ref(attachFilesInput{}),
 					},
 				},
 			},
 			Responses: map[string]goapidoc.Response{
-				"200": {
-					Description: "Files successfully attached to the lesson",
-					Content:     goapidoc.ContentJsonSchemaRef(attachFilesOutput{}),
-				},
+				"200": goapidoc.ResponseWithJson("Files successfully attached to the lesson", goapidoc.Ref(attachFilesOutput{})),
 				"400": Response400,
 				"403": Response403,
-				"404": *goapidoc.NewResponse("There is no such lesson", errorSchema),
+				"404": goapidoc.ResponseWithJson("There is no such lesson", errorSchema),
 				"500": Response500,
 			},
 		},
