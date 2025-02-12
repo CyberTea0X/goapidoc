@@ -211,3 +211,80 @@ func Ref(value any) Schema {
 func oapiSchemaName(value any) string {
 	return reflect.ValueOf(value).Type().Name()
 }
+
+func ResponseWithForm(description string, schema Schema) Response {
+	return Response{
+		Description: description,
+		Content: &Content{
+			FormData: &ContentSchema{
+				Schema: schema,
+			},
+		},
+	}
+}
+
+func ResponseWithJson(description string, schema Schema) Response {
+	return Response{
+		Description: description,
+		Content: &Content{
+			Json: &ContentSchema{
+				Schema: schema,
+			},
+		},
+	}
+}
+
+func RequestWithJson(description string, schema Schema) *RequestBody {
+	return &RequestBody{
+		Description: description,
+		Content: &Content{
+			Json: &ContentSchema{
+				Schema: schema,
+			},
+		},
+	}
+}
+
+func RequestWithForm(description string, schema Schema) *RequestBody {
+	return &RequestBody{
+		Description: description,
+		Content: &Content{
+			FormData: &ContentSchema{
+				Schema: schema,
+			},
+		},
+	}
+}
+
+func toOapiType(t reflect.Type) OapiType {
+	switch t.Kind() {
+	case reflect.Int:
+		return Integer
+	case reflect.Int32:
+		return Integer
+	case reflect.Int64:
+		return Integer
+	case reflect.Uint:
+		return Integer
+	case reflect.Uint64:
+		return Integer
+	case reflect.Uint32:
+		return Integer
+	case reflect.Bool:
+		return Boolean
+	case reflect.Float64:
+		return Number
+	case reflect.Float32:
+		return Number
+	case reflect.String:
+		return String
+	case reflect.Slice:
+		return Array
+	case reflect.Struct:
+		if t.Name() == "Time" {
+			return String
+		}
+		return Object
+	}
+	panic("unhandled type: " + t.String())
+}
