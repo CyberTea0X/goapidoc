@@ -16,10 +16,10 @@ var addStudentRoute = Route{
 	Path: goapidoc.Path{
 		Post: &goapidoc.Method{
 			Summary:     "Add new student",
+			Security:    BearerSecurity,
 			Description: "Add new student to the specified class",
 			OperationId: "addStudent",
 			Tags:        []string{"auth", "teacher"},
-			Parameters:  []goapidoc.Parameter{authParameter},
 			RequestBody: goapidoc.RequestWithJson("student info", goapidoc.Ref(addStudentInput{})),
 			Responses: map[string]goapidoc.Response{
 				"201": goapidoc.ResponseWithJson("Student successfully added into class", goapidoc.Ref(addStudentOutput{})),

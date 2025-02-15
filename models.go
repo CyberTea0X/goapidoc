@@ -23,6 +23,7 @@ type Document struct {
 	Paths          map[string]Path `json:"paths"`
 	Components     *Components     `json:"components,omitempty"`
 	Servers        []Server        `json:"servers,omitempty"`
+	Security       []Security      `json:"security,omitempty"`
 }
 
 func (d *Document) SaveAsJson(filename string) error {
@@ -70,8 +71,12 @@ type License struct {
 }
 
 type Components struct {
-	Schemas Schemas `json:"schemas,omitempty"`
+	Schemas         Schemas         `json:"schemas,omitempty"`
+	SecuritySchemes SecuritySchemes `json:"securitySchemes,omitempty"`
 }
+
+type SecuritySchemes map[string]SecurityScheme
+type SecurityScheme map[string]any
 
 type Server struct {
 	Url string `json:"url"`
@@ -119,6 +124,7 @@ type Parameter struct {
 
 type Method struct {
 	Summary     string              `json:"summary,omitempty"`
+	Security    []Security          `json:"security,omitempty"`
 	Description string              `json:"description,omitempty"`
 	OperationId string              `json:"operationId"`
 	Tags        []string            `json:"tags,omitempty"`
@@ -126,6 +132,10 @@ type Method struct {
 	RequestBody *RequestBody        `json:"requestBody,omitempty"`
 	Responses   map[string]Response `json:"responses"`
 }
+
+type Security map[string]SecurityScopes
+
+type SecurityScopes []string
 
 type Header struct {
 	Description string `json:"description,omitempty"`

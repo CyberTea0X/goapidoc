@@ -22,10 +22,10 @@ var subjectAddRoute = Route{
 	Path: goapidoc.Path{
 		Post: &goapidoc.Method{
 			Summary:     "Add item",
+			Security:    BearerSecurity,
 			Description: "Add a new subject",
 			OperationId: "subjectAdd",
 			Tags:        []string{"auth", "teacher"},
-			Parameters:  []goapidoc.Parameter{authParameter},
 			RequestBody: goapidoc.RequestWithJson("Item Parameters", goapidoc.Ref(subjectAddInput{})),
 			Responses: map[string]goapidoc.Response{
 				"201": goapidoc.ResponseWithJson("Code and link to the item page", goapidoc.Ref(subjectAddOutput{})),

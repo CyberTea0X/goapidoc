@@ -17,10 +17,10 @@ var attachAttendanceRoute = Route{
 	Path: goapidoc.Path{
 		Put: &goapidoc.Method{
 			Summary:     "Attach attendance",
+			Security:    BearerSecurity,
 			Description: "Attaches the attendance list to the lesson. If attendance was already connected for the student, it is updated",
 			OperationId: "attachAttendance",
 			Tags:        []string{"auth", "teacher"},
-			Parameters:  []goapidoc.Parameter{authParameter},
 			RequestBody: goapidoc.RequestWithJson(
 				"List of records where the lesson and the fact of attendance/absence are indicated",
 				goapidoc.Ref(attachAttendanceInput{}),

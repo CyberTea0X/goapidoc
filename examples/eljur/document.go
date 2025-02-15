@@ -55,6 +55,9 @@ var Response409 = oapi.Response{Description: "Conflict with another resource"}
 var Response500 = oapi.Response{Description: "Server error"}
 var InfoResponse = oapi.ResponseWithJson("Operation successful. Json contains info with additional information", infoOk)
 var UnixDateExample = int64(10250045)
+var BearerSecurity = []oapi.Security{
+	{"bearerAuth": oapi.SecurityScopes{}},
+}
 
 func BuildDocument() *oapi.Document {
 	doc := oapi.Document{
@@ -71,8 +74,18 @@ func BuildDocument() *oapi.Document {
 			{Name: "teacher", Description: "teacher role required"},
 			{Name: "admin", Description: "admin role required"},
 		},
-		Paths:      map[string]oapi.Path{},
-		Components: &oapi.Components{Schemas: oapi.Schemas{}},
+		Paths: map[string]oapi.Path{},
+		Components: &oapi.Components{
+			Schemas: oapi.Schemas{},
+			SecuritySchemes: oapi.SecuritySchemes{
+				"bearerAuth": oapi.SecurityScheme{
+					"type":         "http",
+					"scheme":       "bearer",
+					"bearerFormat": "JWT",
+				},
+			},
+		},
+		Security: BearerSecurity,
 	}
 	addRoute(doc, registerRoute)
 	addRoute(doc, loginRoute)

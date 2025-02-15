@@ -18,10 +18,10 @@ var giveGradeRoute = Route{
 	Path: goapidoc.Path{
 		Post: &goapidoc.Method{
 			Summary:     "Rate this",
+			Security:    BearerSecurity,
 			Description: "Rate this",
 			OperationId: "giveGrade",
 			Tags:        []string{"auth", "teacher"},
-			Parameters:  []goapidoc.Parameter{authParameter},
 			RequestBody: &goapidoc.RequestBody{
 				Description: "Rate this",
 			},

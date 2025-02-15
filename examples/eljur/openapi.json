@@ -27,23 +27,16 @@
     "/attendance": {
       "put": {
         "summary": "Attach attendance",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "description": "Attaches the attendance list to the lesson. If attendance was already connected for the student, it is updated",
         "operationId": "attachAttendance",
         "tags": [
           "auth",
           "teacher"
-        ],
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Authentication parameter",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer \u003ctoken\u003e"
-            }
-          }
         ],
         "requestBody": {
           "description": "List of records where the lesson and the fact of attendance/absence are indicated",
@@ -87,22 +80,15 @@
     "/class": {
       "post": {
         "summary": "Add new class",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "description": "Adds new class",
         "operationId": "addClass",
         "tags": [
           "auth"
-        ],
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Authentication parameter",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer \u003ctoken\u003e"
-            }
-          }
         ],
         "requestBody": {
           "description": "Class info",
@@ -150,23 +136,16 @@
     "/grade": {
       "post": {
         "summary": "Rate this",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "description": "Rate this",
         "operationId": "giveGrade",
         "tags": [
           "auth",
           "teacher"
-        ],
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Authentication parameter",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer \u003ctoken\u003e"
-            }
-          }
         ],
         "requestBody": {
           "description": "Rate this"
@@ -217,6 +196,11 @@
     "/grades": {
       "get": {
         "summary": "Get ratings",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "description": "Get a list of student grades. given_at together with lesson id defines a single grade. given_at is a unix date",
         "operationId": "getGrades",
         "tags": [
@@ -225,16 +209,6 @@
           "teacher"
         ],
         "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Authentication parameter",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer \u003ctoken\u003e"
-            }
-          },
           {
             "name": "student_id",
             "in": "query",
@@ -282,23 +256,16 @@
     "/lesson": {
       "post": {
         "summary": "Create new lesson",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "description": "Create new lesson",
         "operationId": "createLesson",
         "tags": [
           "auth",
           "teacher"
-        ],
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Authentication parameter",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer \u003ctoken\u003e"
-            }
-          }
         ],
         "requestBody": {
           "description": "Lesson info",
@@ -352,23 +319,16 @@
     "/lesson/attach-files": {
       "post": {
         "summary": "Attach files to lesson",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "description": "Attach files to a specific lesson",
         "operationId": "attachFilesToLesson",
         "tags": [
           "auth",
           "teacher"
-        ],
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Authentication parameter",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer \u003ctoken\u003e"
-            }
-          }
         ],
         "requestBody": {
           "description": "Files to attach to the lesson",
@@ -559,23 +519,16 @@
     "/student": {
       "post": {
         "summary": "Add new student",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "description": "Add new student to the specified class",
         "operationId": "addStudent",
         "tags": [
           "auth",
           "teacher"
-        ],
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Authentication parameter",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer \u003ctoken\u003e"
-            }
-          }
         ],
         "requestBody": {
           "description": "student info",
@@ -626,23 +579,16 @@
     "/students": {
       "get": {
         "summary": "Get list of students",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "description": "Get a list of all students in a specified class",
         "operationId": "getStudents",
         "tags": [
           "auth",
           "teacher"
-        ],
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Authentication parameter",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer \u003ctoken\u003e"
-            }
-          }
         ],
         "responses": {
           "200": {
@@ -683,23 +629,16 @@
     "/subject": {
       "post": {
         "summary": "Add item",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "description": "Add a new subject",
         "operationId": "subjectAdd",
         "tags": [
           "auth",
           "teacher"
-        ],
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Authentication parameter",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer \u003ctoken\u003e"
-            }
-          }
         ],
         "requestBody": {
           "description": "Item Parameters",
@@ -750,23 +689,16 @@
     "/teacher": {
       "post": {
         "summary": "Add new teacher",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "description": "Adds new teacher into system",
         "operationId": "addTeacher",
         "tags": [
           "auth",
           "admin"
-        ],
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Authentication parameter",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer \u003ctoken\u003e"
-            }
-          }
         ],
         "requestBody": {
           "description": "Teacher info",
@@ -1225,6 +1157,18 @@
           }
         }
       }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "bearerFormat": "JWT",
+        "scheme": "bearer",
+        "type": "http"
+      }
     }
-  }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ]
 }

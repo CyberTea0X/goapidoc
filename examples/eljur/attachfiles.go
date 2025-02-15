@@ -16,10 +16,10 @@ var attachFilesRoute = Route{
 	Path: goapidoc.Path{
 		Post: &goapidoc.Method{
 			Summary:     "Attach files to lesson",
+			Security:    BearerSecurity,
 			Description: "Attach files to a specific lesson",
 			OperationId: "attachFilesToLesson",
 			Tags:        []string{"auth", "teacher"},
-			Parameters:  []goapidoc.Parameter{authParameter},
 			RequestBody: &goapidoc.RequestBody{
 				Description: "Files to attach to the lesson",
 				Content: &goapidoc.Content{

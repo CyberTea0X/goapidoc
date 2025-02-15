@@ -18,11 +18,11 @@ var getGradesRoute = Route{
 	Path: goapidoc.Path{
 		Get: &goapidoc.Method{
 			Summary:     "Get ratings",
+			Security:    BearerSecurity,
 			Description: "Get a list of student grades. given_at together with lesson id defines a single grade. given_at is a unix date",
 			OperationId: "getGrades",
 			Tags:        []string{"auth", "student", "teacher"},
 			Parameters: []goapidoc.Parameter{
-				authParameter,
 				{Name: "student_id", In: "query", Required: true, Description: "id студента"},
 			},
 			Responses: map[string]goapidoc.Response{

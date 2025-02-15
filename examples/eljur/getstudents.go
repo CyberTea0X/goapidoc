@@ -23,10 +23,10 @@ var getStudentsRoute = Route{
 	Path: goapidoc.Path{
 		Get: &goapidoc.Method{
 			Summary:     "Get list of students",
+			Security:    BearerSecurity,
 			Description: "Get a list of all students in a specified class",
 			OperationId: "getStudents",
 			Tags:        []string{"auth", "teacher"},
-			Parameters:  []goapidoc.Parameter{authParameter},
 			Responses: map[string]goapidoc.Response{
 				"200": goapidoc.ResponseWithJson("List of students successfully received", goapidoc.Ref(getStudentsOutput{})),
 				"400": Response400,
