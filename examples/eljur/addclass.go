@@ -3,7 +3,7 @@ package main
 import "github.com/CyberTea0X/goapidoc"
 
 type addClassInput struct {
-	Name        string `json:"name,required"`
+	Name        string `json:"name" validate:"required"`
 	Description string `json:"description"` // Описание класса (например, "Математический класс")
 	TeacherID   int64  `json:"teacher_id"`  // Идентификатор учителя, который будет вести класс
 }

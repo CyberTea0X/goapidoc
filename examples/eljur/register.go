@@ -3,16 +3,16 @@ package main
 import "github.com/CyberTea0X/goapidoc"
 
 type registerInput struct {
-	Name     string `json:"name,required"`
-	Surname  string `json:"surname,required"`
-	Phone    string `json:"phone,required"`
-	Mail     string `json:"mail,required"`
-	Code     string `json:"code,required"`
-	Password string `json:"password,required"`
+	Name     string `json:"name" validate:"required"`
+	Surname  string `json:"surname" validate:"required"`
+	Phone    string `json:"phone" validate:"required"`
+	Mail     string `json:"mail" validate:"required"`
+	Code     string `json:"code" validate:"required"`
+	Password string `json:"password" validate:"required"`
 }
 
 type registerOutput struct {
-	Id string `json:"id,required"`
+	Id string `json:"id" validate:"required"`
 }
 
 var registerRoute = Route{

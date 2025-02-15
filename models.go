@@ -237,6 +237,7 @@ type Schema struct {
 	Properties map[string]any `json:"properties,omitempty"`
 	Ref        string         `json:"$ref,omitempty"`
 	Example    any            `json:"example,omitempty"`
+	Required   []string       `json:"required,omitempty"`
 }
 
 func (s Schema) WithExample(example any) Schema {

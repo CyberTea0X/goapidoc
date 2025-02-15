@@ -3,12 +3,12 @@ package main
 import "github.com/CyberTea0X/goapidoc"
 
 type addStudentInput struct {
-	ClassId int64 `json:"class_id,required"`
+	ClassId int64 `json:"class_id" validate:"required"`
 }
 
 type addStudentOutput struct {
-	Code     string `json:"code,required"`
-	Password string `json:"password,required"`
+	Code     string `json:"code" validate:"required"`
+	Password string `json:"password" validate:"required"`
 }
 
 var addStudentRoute = Route{

@@ -402,7 +402,7 @@
             "name": "code",
             "in": "query",
             "description": "",
-            "required": false,
+            "required": true,
             "schema": {
               "type": "string",
               "example": "43124589"
@@ -412,7 +412,7 @@
             "name": "password",
             "in": "query",
             "description": "",
-            "required": false,
+            "required": true,
             "schema": {
               "type": "string",
               "example": "vladikkrutoymalchik2008"
@@ -765,7 +765,10 @@
             "format": "int64",
             "example": 542
           }
-        }
+        },
+        "required": [
+          "name"
+        ]
       },
       "addClassOutput": {
         "type": "object",
@@ -819,7 +822,13 @@
             "format": "int64",
             "example": 1
           }
-        }
+        },
+        "required": [
+          "index",
+          "name",
+          "date",
+          "subject_id"
+        ]
       },
       "addLessonOutput": {
         "type": "object",
@@ -839,7 +848,10 @@
             "format": "int64",
             "example": 415
           }
-        }
+        },
+        "required": [
+          "class_id"
+        ]
       },
       "addStudentOutput": {
         "type": "object",
@@ -852,7 +864,11 @@
             "type": "string",
             "example": "vladikbrutal2009"
           }
-        }
+        },
+        "required": [
+          "code",
+          "password"
+        ]
       },
       "addTeacherInput": {
         "type": "object",
@@ -883,7 +899,12 @@
               102
             ]
           }
-        }
+        },
+        "required": [
+          "first_name",
+          "last_name",
+          "email"
+        ]
       },
       "addTeacherOutput": {
         "type": "object",
@@ -901,7 +922,12 @@
             "format": "int64",
             "example": 123
           }
-        }
+        },
+        "required": [
+          "teacher_id",
+          "code",
+          "password"
+        ]
       },
       "attachAttendanceInput": {
         "type": "object",
@@ -931,7 +957,11 @@
             "format": "int64",
             "example": 1
           }
-        }
+        },
+        "required": [
+          "lesson_id",
+          "attendance"
+        ]
       },
       "attachFilesInput": {
         "type": "object",
@@ -951,7 +981,11 @@
             "format": "int64",
             "example": 1
           }
-        }
+        },
+        "required": [
+          "lesson_id",
+          "files"
+        ]
       },
       "attachFilesOutput": {
         "type": "object",
@@ -960,7 +994,10 @@
             "type": "boolean",
             "example": true
           }
-        }
+        },
+        "required": [
+          "success"
+        ]
       },
       "getGradesOutput": {
         "type": "object",
@@ -995,7 +1032,10 @@
             "format": "int64",
             "example": 415
           }
-        }
+        },
+        "required": [
+          "class_id"
+        ]
       },
       "getStudentsOutput": {
         "type": "object",
@@ -1022,7 +1062,10 @@
               }
             ]
           }
-        }
+        },
+        "required": [
+          "students"
+        ]
       },
       "giveGradeInput": {
         "type": "object",
@@ -1046,7 +1089,12 @@
             "format": "int64",
             "example": 1
           }
-        }
+        },
+        "required": [
+          "lesson_id",
+          "student_id",
+          "grade"
+        ]
       },
       "loginOutput": {
         "type": "object",
@@ -1069,7 +1117,13 @@
             "type": "string",
             "example": "thisis.refresh.token"
           }
-        }
+        },
+        "required": [
+          "access_token",
+          "access_expires_at",
+          "refresh_token",
+          "refresh_expires_at"
+        ]
       },
       "registerInput": {
         "type": "object",
@@ -1098,7 +1152,15 @@
             "type": "string",
             "example": "Petrov"
           }
-        }
+        },
+        "required": [
+          "name",
+          "surname",
+          "phone",
+          "mail",
+          "code",
+          "password"
+        ]
       },
       "registerOutput": {
         "type": "object",
@@ -1107,7 +1169,10 @@
             "type": "string",
             "example": "43124589"
           }
-        }
+        },
+        "required": [
+          "id"
+        ]
       },
       "subjectAddInput": {
         "type": "object",
@@ -1141,7 +1206,13 @@
             "type": "string",
             "example": "9 класс"
           }
-        }
+        },
+        "required": [
+          "name",
+          "public",
+          "instructor",
+          "capacity"
+        ]
       },
       "subjectAddOutput": {
         "type": "object",
@@ -1155,7 +1226,11 @@
             "type": "string",
             "example": "http://example.com/subjects/1341"
           }
-        }
+        },
+        "required": [
+          "subject_code",
+          "url"
+        ]
       }
     },
     "securitySchemes": {

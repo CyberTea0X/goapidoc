@@ -43,7 +43,7 @@ func ParametersFromStruct(value any, in string) []Parameter {
 			panic("failed to infer property name in struct " + t.Name())
 		}
 		required := false
-		if field.Tag.Get("binding") != "" {
+		if field.Tag.Get("binding") != "" || field.Tag.Get("validate") != "" {
 			required = true
 		}
 		parameters[i] = Parameter{
@@ -87,6 +87,7 @@ func toSnake(camel string) (snake string) {
 
 func SchemaFromStruct(value any) (Schema, error) {
 	properties := make(map[string]any)
+	required := make([]string, 0)
 	t := reflect.TypeOf(value)
 	if t.Kind() != reflect.Struct {
 		return Schema{}, errors.New("expected struct")
@@ -125,6 +126,9 @@ func SchemaFromStruct(value any) (Schema, error) {
 				return Schema{}, errors.New("failed to generate schema from " + fValue.Type().String())
 			}
 		}
+		if field.Tag.Get("binding") != "" || field.Tag.Get("validate") != "" {
+			required = append(required, propertyName)
+		}
 		properties[propertyName] = fieldSchema
 		if fValue.Type().Kind() == reflect.Slice {
 			property := properties[propertyName].(Schema)
@@ -137,6 +141,7 @@ func SchemaFromStruct(value any) (Schema, error) {
 	}
 	return Schema{
 		Type:       "object",
+		Required:   required,
 		Properties: properties,
 	}, nil
 }

@@ -3,12 +3,12 @@ package main
 import "github.com/CyberTea0X/goapidoc"
 
 type addLessonInput struct {
-	Index          int    `json:"index,required"`
-	Name           string `json:"name,required"`
+	Index          int    `json:"index" validate:"required"`
+	Name           string `json:"name" validate:"required"`
 	Description    string `json:"description"`
-	IsOnline       bool   `json:"is_online"`     // Проводится ли урок онлайн (true/false)
-	Date           string `json:"date,required"` // Дата проведения урока (например, "2023-10-15")
-	SubjectId      int64  `json:"subject_id,required"`
+	IsOnline       bool   `json:"is_online"`                // Проводится ли урок онлайн (true/false)
+	Date           string `json:"date" validate:"required"` // Дата проведения урока (например, "2023-10-15")
+	SubjectId      int64  `json:"subject_id" validate:"required"`
 	ClassId        int64  `json:"class_id"`        // Идентификатор класса, для которого проводится урок
 	TeacherId      int64  `json:"teacher_id"`      // Идентификатор учителя, который ведет
 	ScheduleNumber int    `json:"schedule_number"` // Указывает каким по номеру в расписании идёт урок

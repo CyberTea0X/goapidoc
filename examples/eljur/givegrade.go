@@ -3,9 +3,9 @@ package main
 import "github.com/CyberTea0X/goapidoc"
 
 type giveGradeInput struct {
-	LessonId  int64  `json:"lesson_id,required"`
-	StudentId int64  `json:"student_id,required"`
-	Grade     int64  `json:"grade,required"`
+	LessonId  int64  `json:"lesson_id" validate:"required"`
+	StudentId int64  `json:"student_id" validate:"required"`
+	Grade     int64  `json:"grade" validate:"required"`
 	Comment   string `json:"comment"`
 }
 

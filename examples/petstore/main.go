@@ -5,16 +5,16 @@ import (
 )
 
 type Pet struct {
-	Id   int64  `json:"id" binding:"required"`
-	Name string `json:"name" binding:"required"`
+	Id   int64  `json:"id" validate:"required"`
+	Name string `json:"name" validate:"required"`
 	Tag  string `json:"tag"`
 }
 
 type Pets []Pet
 
 type Error struct {
-	Code    int32  `json:"code" binding:"required"`
-	Message string `json:"message" binding:"required"`
+	Code    int32  `json:"code" validate:"required"`
+	Message string `json:"message" validate:"required"`
 }
 
 var DefaultResponse = oapi.ResponseWithJson("unexpected error", oapi.Ref(Error{}))

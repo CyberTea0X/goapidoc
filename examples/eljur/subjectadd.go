@@ -3,18 +3,18 @@ package main
 import "github.com/CyberTea0X/goapidoc"
 
 type subjectAddInput struct {
-	Name          string `json:"name,required"`
+	Name          string `json:"name" validate:"required"`
 	Desription    string `json:"description"`
-	Public        bool   `json:"public,required"`
+	Public        bool   `json:"public" validate:"required"`
 	RequiresGroup string `json:"requires_group"`
-	Instructor    int64  `json:"instructor,required"`
-	Capacity      int    `json:"capacity,required"`
+	Instructor    int64  `json:"instructor" validate:"required"`
+	Capacity      int    `json:"capacity" validate:"required"`
 	IsActive      bool   `json:"is_active"`
 }
 
 type subjectAddOutput struct {
-	SubjectCode int64  `json:"subject_code,required"`
-	Url         string `json:"url,required"`
+	SubjectCode int64  `json:"subject_code" validate:"required"`
+	Url         string `json:"url" validate:"required"`
 }
 
 var subjectAddRoute = Route{

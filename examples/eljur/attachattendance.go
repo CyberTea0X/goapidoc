@@ -3,13 +3,13 @@ package main
 import "github.com/CyberTea0X/goapidoc"
 
 type attachAttendanceInput struct {
-	LessonId   int64              `json:"lesson_id,required"`
-	Attendance []attendanceRecord `json:"attendance,required"`
+	LessonId   int64              `json:"lesson_id" validate:"required"`
+	Attendance []attendanceRecord `json:"attendance" validate:"required"`
 }
 
 type attendanceRecord struct {
-	StudentId int64 `json:"student_id,required"`
-	Presence  bool  `json:"presence,required"`
+	StudentId int64 `json:"student_id" validate:"required"`
+	Presence  bool  `json:"presence" validate:"required"`
 }
 
 var attachAttendanceRoute = Route{

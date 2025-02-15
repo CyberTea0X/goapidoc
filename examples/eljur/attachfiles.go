@@ -3,12 +3,12 @@ package main
 import "github.com/CyberTea0X/goapidoc"
 
 type attachFilesInput struct {
-	LessonId int64    `form:"lesson_id,required"` // Идентификатор урока, к которому прикрепляются файлы
-	Files    []string `form:"files,required"`     // Список файлов для загрузки
+	LessonId int64    `form:"lesson_id" validate:"required"` // Идентификатор урока, к которому прикрепляются файлы
+	Files    []string `form:"files" validate:"required"`     // Список файлов для загрузки
 }
 
 type attachFilesOutput struct {
-	Success bool `json:"success,required"` // Успешно ли прикреплены файлы
+	Success bool `json:"success" validate:"required"` // Успешно ли прикреплены файлы
 }
 
 var attachFilesRoute = Route{

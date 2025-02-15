@@ -3,15 +3,15 @@ package main
 import "github.com/CyberTea0X/goapidoc"
 
 type loginInput struct {
-	Code     string `json:"code,required"`
-	Password string `json:"password,required"`
+	Code     string `json:"code" validate:"required"`
+	Password string `json:"password" validate:"required"`
 }
 
 type loginOutput struct {
-	AccessToken      string `json:"access_token,required"`
-	AccessExpiresAt  int64  `json:"access_expires_at,required"`
-	RefreshToken     string `json:"refresh_token,required"`
-	RefreshExpiresAt int64  `json:"refresh_expires_at,required"`
+	AccessToken      string `json:"access_token" validate:"required"`
+	AccessExpiresAt  int64  `json:"access_expires_at" validate:"required"`
+	RefreshToken     string `json:"refresh_token" validate:"required"`
+	RefreshExpiresAt int64  `json:"refresh_expires_at" validate:"required"`
 }
 
 var loginRoute = Route{

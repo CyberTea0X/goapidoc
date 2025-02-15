@@ -3,19 +3,19 @@ package main
 import "github.com/CyberTea0X/goapidoc"
 
 type getStudentsInput struct {
-	ClassId int64 `json:"class_id,required"`
+	ClassId int64 `json:"class_id" validate:"required"`
 }
 
 type getStudentsOutput struct {
-	Students []Student `json:"students,required"`
+	Students []Student `json:"students" validate:"required"`
 }
 
 type Student struct {
-	Id       int64  `json:"id,required"`
-	Name     string `json:"name,required"`
-	Lastname string `json:"lastname,required"`
-	Phone    string `json:"phone,required"`
-	Mail     string `json:"mail,required"`
+	Id       int64  `json:"id" validate:"required"`
+	Name     string `json:"name" validate:"required"`
+	Lastname string `json:"lastname" validate:"required"`
+	Phone    string `json:"phone" validate:"required"`
+	Mail     string `json:"mail" validate:"required"`
 }
 
 var getStudentsRoute = Route{

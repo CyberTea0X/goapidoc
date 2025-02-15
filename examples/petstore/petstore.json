@@ -140,7 +140,11 @@
             "type": "string",
             "example": "server crushed"
           }
-        }
+        },
+        "required": [
+          "code",
+          "message"
+        ]
       },
       "Pet": {
         "type": "object",
@@ -158,7 +162,11 @@
             "type": "string",
             "example": "dogs"
           }
-        }
+        },
+        "required": [
+          "id",
+          "name"
+        ]
       },
       "Pets": {
         "type": "array",

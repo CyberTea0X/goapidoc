@@ -3,17 +3,17 @@ package main
 import "github.com/CyberTea0X/goapidoc"
 
 type addTeacherInput struct {
-	FirstName   string  `json:"first_name,required"` // Имя учителя
-	LastName    string  `json:"last_name,required"`  // Фамилия учителя
-	SubjectIds  []int64 `json:"subject_ids"`         // Идентификаторы предметов, которые преподает учитель
-	Email       string  `json:"email,required"`      // Электронная почта учителя
-	PhoneNumber string  `json:"phone_number"`        // Номер телефона учителя (опционально)
+	FirstName   string  `json:"first_name" validate:"required"` // Имя учителя
+	LastName    string  `json:"last_name" validate:"required"`  // Фамилия учителя
+	SubjectIds  []int64 `json:"subject_ids"`                    // Идентификаторы предметов, которые преподает учитель
+	Email       string  `json:"email" validate:"required"`      // Электронная почта учителя
+	PhoneNumber string  `json:"phone_number"`                   // Номер телефона учителя (опционально)
 }
 
 type addTeacherOutput struct {
-	TeacherId int64  `json:"teacher_id,required"` // Идентификатор добавленного учителя
-	Code      string `json:"code,required"`       // Код для доступа (например, для входа в систему)
-	Password  string `json:"password,required"`   // Пароль для доступа
+	TeacherId int64  `json:"teacher_id" validate:"required"` // Идентификатор добавленного учителя
+	Code      string `json:"code" validate:"required"`       // Код для доступа (например, для входа в систему)
+	Password  string `json:"password" validate:"required"`   // Пароль для доступа
 }
 
 var addTeacherRoute = Route{
