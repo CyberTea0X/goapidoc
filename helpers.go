@@ -239,7 +239,7 @@ func ResponseWithJson(description string, schema Schema) Response {
 	}
 }
 
-func RequestWithJson(description string, schema Schema) *RequestBody {
+func RequestWithJson(description string, schema Schema, required bool) *RequestBody {
 	return &RequestBody{
 		Description: description,
 		Content: &Content{
@@ -247,6 +247,7 @@ func RequestWithJson(description string, schema Schema) *RequestBody {
 				Schema: schema,
 			},
 		},
+		Required: required,
 	}
 }
 

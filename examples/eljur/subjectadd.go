@@ -26,7 +26,7 @@ var subjectAddRoute = Route{
 			Description: "Add a new subject",
 			OperationId: "subjectAdd",
 			Tags:        []string{"auth", "teacher"},
-			RequestBody: goapidoc.RequestWithJson("Item Parameters", goapidoc.Ref(subjectAddInput{})),
+			RequestBody: goapidoc.RequestWithJson("Item Parameters", goapidoc.Ref(subjectAddInput{}), true),
 			Responses: map[string]goapidoc.Response{
 				"201": goapidoc.ResponseWithJson("Code and link to the item page", goapidoc.Ref(subjectAddOutput{})),
 				"400": Response400,

@@ -21,7 +21,7 @@ var addClassRoute = Route{
 			Description: "Adds new class",
 			OperationId: "addClass",
 			Tags:        []string{"auth"},
-			RequestBody: goapidoc.RequestWithJson("Class info", goapidoc.Ref(addClassInput{})),
+			RequestBody: goapidoc.RequestWithJson("Class info", goapidoc.Ref(addClassInput{}), true),
 			Responses: map[string]goapidoc.Response{
 				"201": goapidoc.ResponseWithJson("Class successfully added", goapidoc.Ref(addClassOutput{})),
 				"400": Response400,

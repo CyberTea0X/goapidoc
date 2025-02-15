@@ -27,7 +27,7 @@ var addLessonRoute = Route{
 			Description: "Create new lesson",
 			OperationId: "createLesson",
 			Tags:        []string{"auth", "teacher"},
-			RequestBody: goapidoc.RequestWithJson("Lesson info", goapidoc.Ref(addLessonInput{})),
+			RequestBody: goapidoc.RequestWithJson("Lesson info", goapidoc.Ref(addLessonInput{}), true),
 			Responses: map[string]goapidoc.Response{
 				"201": goapidoc.ResponseWithJson("Lesson successfully added", goapidoc.Ref(addLessonOutput{})),
 				"400": Response400,

@@ -156,6 +156,7 @@ func (r Response) WithHeaders(headers map[string]Header) Response {
 }
 
 type RequestBody struct {
+	Required    bool     `json:"required,omitempty"`
 	Description string   `json:"description,omitempty"`
 	Content     *Content `json:"content,omitempty"`
 }
@@ -234,10 +235,10 @@ type Schema struct {
 	Type       OapiType       `json:"type,omitempty"`
 	Format     string         `json:"format,omitempty"`
 	Items      *Schema        `json:"items,omitempty"`
+	Required   []string       `json:"required,omitempty"`
 	Properties map[string]any `json:"properties,omitempty"`
 	Ref        string         `json:"$ref,omitempty"`
 	Example    any            `json:"example,omitempty"`
-	Required   []string       `json:"required,omitempty"`
 }
 
 func (s Schema) WithExample(example any) Schema {

@@ -24,6 +24,7 @@ var attachAttendanceRoute = Route{
 			RequestBody: goapidoc.RequestWithJson(
 				"List of records where the lesson and the fact of attendance/absence are indicated",
 				goapidoc.Ref(attachAttendanceInput{}),
+				true,
 			),
 			Responses: map[string]goapidoc.Response{
 				"200": Response200Empty,

@@ -20,7 +20,7 @@ var addStudentRoute = Route{
 			Description: "Add new student to the specified class",
 			OperationId: "addStudent",
 			Tags:        []string{"auth", "teacher"},
-			RequestBody: goapidoc.RequestWithJson("student info", goapidoc.Ref(addStudentInput{})),
+			RequestBody: goapidoc.RequestWithJson("student info", goapidoc.Ref(addStudentInput{}), true),
 			Responses: map[string]goapidoc.Response{
 				"201": goapidoc.ResponseWithJson("Student successfully added into class", goapidoc.Ref(addStudentOutput{})),
 				"400": Response400,

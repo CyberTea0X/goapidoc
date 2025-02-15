@@ -24,7 +24,7 @@ var registerRoute = Route{
 			OperationId: "registerUser",
 			Tags:        []string{},
 			Parameters:  []goapidoc.Parameter{},
-			RequestBody: goapidoc.RequestWithJson("User data", goapidoc.Ref(registerInput{})),
+			RequestBody: goapidoc.RequestWithJson("User data", goapidoc.Ref(registerInput{}), true),
 			Responses: map[string]goapidoc.Response{
 				"201": goapidoc.ResponseWithJson("User registered successfully", goapidoc.Ref(registerOutput{})),
 				"400": Response400,
