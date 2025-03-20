@@ -2,6 +2,7 @@ package goapidoc
 
 import (
 	"errors"
+	"fmt"
 	"reflect"
 	"strings"
 )
@@ -151,7 +152,7 @@ func SchemaFromSlice(value any) (Schema, error) {
 	if t.Kind() != reflect.Slice {
 		return Schema{}, errors.New("expected slice")
 	}
-	items, err := SchemaFromPrimitiveType(t.Elem(), nil)
+	items, err := schemaFrom(reflect.Zero(t.Elem()).Interface())
 	if err != nil {
 		return Schema{}, err
 	}
@@ -174,7 +175,7 @@ func SchemaFromPrimitive(value any) (Schema, error) {
 func SchemaFromPrimitiveType(t reflect.Type, example any) (Schema, error) {
 	kind := t.Kind()
 	if kind == reflect.Struct || kind == reflect.Slice || kind == reflect.Pointer {
-		return Schema{}, errors.New("expected primitive")
+		return Schema{}, fmt.Errorf("expected primitive type, got %v. %w", t, errors.New("expected primitive"))
 	}
 	var format string
 	switch kind {
@@ -197,6 +198,8 @@ func schemaFrom(value any) (Schema, error) {
 		return SchemaFromStruct(value)
 	case reflect.Slice:
 		return SchemaFromSlice(value)
+	case reflect.Pointer:
+		return Schema{}, fmt.Errorf("making schema from pointer type %v is not supported. %w", t, errors.New("unexpected pointer"))
 	default:
 		return SchemaFromPrimitive(value)
 	}

@@ -38,12 +38,31 @@ func TestSlice(t *testing.T) {
 	if int64Schema.Type != goapidoc.Array {
 		t.Errorf("Expected int64 slice schema type to be Array, got %v", int64Schema.Type)
 	}
-
 	if int64Schema.Items.Format != goapidoc.SchemaInt64.Format {
-		t.Errorf("Expected int64 slice schema format to be Int64, got %v", int64Schema.Format)
+		t.Errorf("Expected int64 slice schema format to be Int64, got %v. Items: %v", int64Schema.Format, int64Schema.Items)
 	}
 
 	if len(int64Schema.Example.([]int64)) != 4 {
 		t.Errorf("Expected int64 slice schema example to be [1, 2, 3, 4], got %v", int64Schema.Example)
+	}
+
+	// test struct slice
+	type testStruct struct {
+		Name  string
+		Value int
+	}
+	structSlice := []testStruct{
+		{Name: "first", Value: 1},
+		{Name: "second", Value: 2},
+	}
+	structSchema := goapidoc.SchemaFrom(structSlice)
+	if structSchema.Type != goapidoc.Array {
+		t.Errorf("Expected struct slice schema type to be Array, got %v", structSchema.Type)
+	}
+	if structSchema.Items.Type != goapidoc.Object {
+		t.Errorf("Expected struct slice items type to be Object, got %v", structSchema.Items.Type)
+	}
+	if len(structSchema.Example.([]testStruct)) != 2 {
+		t.Errorf("Expected struct slice schema example to have 2 items, got %d", len(structSchema.Example.([]testStruct)))
 	}
 }
