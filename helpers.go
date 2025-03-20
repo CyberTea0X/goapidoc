@@ -87,64 +87,80 @@ func toSnake(camel string) (snake string) {
 }
 
 func SchemaFromStruct(value any) (Schema, error) {
-	properties := make(map[string]any)
-	required := make([]string, 0)
 	t := reflect.TypeOf(value)
 	if t.Kind() != reflect.Struct {
 		return Schema{}, errors.New("expected struct")
 	}
+
+	properties := make(map[string]any)
+	required := make([]string, 0)
 	rValue := reflect.ValueOf(value)
-	numberOfFields := rValue.NumField()
-	for i := 0; i < numberOfFields; i++ {
+
+	for i := range rValue.NumField() {
 		field := t.Field(i)
-		if field.IsExported() == false {
+		if !field.IsExported() {
 			continue
 		}
-		fValue := rValue.Field(i)
-		propertyName := strings.Split(field.Tag.Get("json"), ",")[0]
-		if propertyName == "" {
-			propertyName = toSnake(field.Name)
-		}
-		if fValue.Type().Kind() == reflect.Pointer {
-			if fValue.IsNil() {
-				continue
-			}
-			fValue = fValue.Elem()
-		}
-		var fieldSchema Schema
-		if fValue.Type().Kind() == reflect.Struct && fValue.Type().Name() != "Time" {
-			var err error
-			example, err := schemaFrom(fValue.Interface())
-			if err != nil {
-				return Schema{}, err
-			}
-			fieldSchema = Schema{Type: "object", Properties: example.Properties}
-		} else {
 
-			var err error
-			fieldSchema, err = schemaFrom(fValue.Interface())
-			if err != nil {
-				return Schema{}, errors.New("failed to generate schema from " + fValue.Type().String())
-			}
+		propertyName := getPropertyName(field)
+		fValue := getFieldValue(rValue.Field(i))
+		if fValue.IsValid() == false { // Skip nil pointers
+			continue
 		}
-		if field.Tag.Get("binding") != "" || field.Tag.Get("validate") != "" {
+
+		fieldSchema, err := getFieldSchema(fValue)
+		if err != nil {
+			return Schema{}, err
+		}
+
+		if isRequired(field) {
 			required = append(required, propertyName)
 		}
 		properties[propertyName] = fieldSchema
-		if fValue.Type().Kind() == reflect.Slice {
-			property := properties[propertyName].(Schema)
-			elemType := fValue.Type().Elem()
-			property.Items = &Schema{
-				Type: toOapiType(elemType),
-			}
-			properties[propertyName] = property
-		}
 	}
+
 	return Schema{
 		Type:       "object",
 		Required:   required,
 		Properties: properties,
 	}, nil
+}
+
+func getPropertyName(field reflect.StructField) string {
+	propertyName := strings.Split(field.Tag.Get("json"), ",")[0]
+	if propertyName == "" {
+		propertyName = toSnake(field.Name)
+	}
+	return propertyName
+}
+
+func getFieldValue(fValue reflect.Value) reflect.Value {
+	if fValue.Type().Kind() == reflect.Pointer {
+		if fValue.IsNil() {
+			return reflect.Value{} // Return invalid value for nil pointers
+		}
+		return fValue.Elem()
+	}
+	return fValue
+}
+
+func getFieldSchema(fValue reflect.Value) (Schema, error) {
+	if fValue.Type().Kind() == reflect.Struct && fValue.Type().Name() != "Time" {
+		example, err := schemaFrom(fValue.Interface())
+		if err != nil {
+			return Schema{}, err
+		}
+		return Schema{Type: "object", Properties: example.Properties}, nil
+	}
+	fieldSchema, err := schemaFrom(fValue.Interface())
+	if err != nil {
+		return Schema{}, errors.New("failed to generate schema from " + fValue.Type().String())
+	}
+	return fieldSchema, nil
+}
+
+func isRequired(field reflect.StructField) bool {
+	return field.Tag.Get("binding") != "" || field.Tag.Get("validate") != ""
 }
 
 func SchemaFromSlice(value any) (Schema, error) {
@@ -201,7 +217,7 @@ func schemaFrom(value any) (Schema, error) {
 	case reflect.Pointer:
 		return Schema{}, fmt.Errorf("making schema from pointer type %v is not supported. %w", t, errors.New("unexpected pointer"))
 	default:
-		return SchemaFromPrimitive(value)
+		return SchemaFromPrimitiveType(t, value)
 	}
 }
 
