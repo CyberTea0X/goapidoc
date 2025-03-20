@@ -151,17 +151,27 @@ func SchemaFromSlice(value any) (Schema, error) {
 	if t.Kind() != reflect.Slice {
 		return Schema{}, errors.New("expected slice")
 	}
+	items, err := SchemaFromPrimitiveType(t.Elem(), nil)
+	if err != nil {
+		return Schema{}, err
+	}
+
 	return Schema{
 		Type:    Array,
 		Example: value,
-		Items: &Schema{
-			Type: toOapiType(t.Elem()),
-		},
+		Items:   &items,
 	}, nil
 }
 
 func SchemaFromPrimitive(value any) (Schema, error) {
 	t := reflect.TypeOf(value)
+	return SchemaFromPrimitiveType(t, value)
+}
+
+// SchemaFromPrimitiveType creates a schema from a primitive type.
+//
+// If the example is not nil, it will be used as the example for the schema.
+func SchemaFromPrimitiveType(t reflect.Type, example any) (Schema, error) {
 	kind := t.Kind()
 	if kind == reflect.Struct || kind == reflect.Slice || kind == reflect.Pointer {
 		return Schema{}, errors.New("expected primitive")
@@ -175,7 +185,7 @@ func SchemaFromPrimitive(value any) (Schema, error) {
 	}
 	return Schema{
 		Type:    toOapiType(t),
-		Example: value,
+		Example: example,
 		Format:  format,
 	}, nil
 }
@@ -192,12 +202,18 @@ func schemaFrom(value any) (Schema, error) {
 	}
 }
 
+// Panics if can't convert the value to a schema.
 func SchemaFrom(value any) Schema {
 	schema, err := schemaFrom(value)
 	if err != nil {
 		panic(err)
 	}
 	return schema
+}
+
+// Returns error if can't convert the value to a schema.
+func SchemaFromOrErr(value any) (Schema, error) {
+	return schemaFrom(value)
 }
 
 func ArrayOf(schema Schema) Schema {
