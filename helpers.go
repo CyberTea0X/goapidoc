@@ -44,10 +44,6 @@ func ParametersFromStruct(value any, in string) []Parameter {
 		if propertyName == "" {
 			panic("failed to infer property name in struct " + t.Name())
 		}
-		required := false
-		if strings.Contains(field.Tag.Get("binding")+field.Tag.Get("validate"), "required") {
-			required = true
-		}
 		fieldSchema, err := schemaFrom(fValue.Interface())
 		if err != nil {
 			panic(err)
@@ -56,7 +52,7 @@ func ParametersFromStruct(value any, in string) []Parameter {
 			In:          in,
 			Name:        propertyName,
 			Description: "",
-			Required:    required,
+			Required:    isRequired(field),
 			Schema:      fieldSchema,
 		}
 	}
