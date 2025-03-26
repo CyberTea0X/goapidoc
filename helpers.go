@@ -45,18 +45,19 @@ func ParametersFromStruct(value any, in string) []Parameter {
 			panic("failed to infer property name in struct " + t.Name())
 		}
 		required := false
-		if field.Tag.Get("binding") != "" || field.Tag.Get("validate") != "" {
+		if strings.Contains(field.Tag.Get("binding")+field.Tag.Get("validate"), "required") {
 			required = true
+		}
+		fieldSchema, err := schemaFrom(fValue.Interface())
+		if err != nil {
+			panic(err)
 		}
 		parameters[i] = Parameter{
 			In:          in,
 			Name:        propertyName,
 			Description: "",
 			Required:    required,
-			Schema: Schema{
-				Type:    toOapiType(fValue.Type()),
-				Example: fValue.Interface(),
-			},
+			Schema:      fieldSchema,
 		}
 	}
 	return parameters
