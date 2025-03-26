@@ -79,7 +79,17 @@ func TestStructWithSliceField(t *testing.T) {
 		Name:  "test",
 		Value: []int64{1, 2, 3, 4},
 	}
-	sliceFormat := goapidoc.SchemaFrom(testStruct).Properties["value"].(goapidoc.Schema).Items.Format
+	property, ok := goapidoc.SchemaFrom(testStruct).Properties["value"]
+	if !ok {
+		t.Errorf("Expected value property, got %v", property)
+		return
+	}
+	sliceSchema, ok := property.(goapidoc.Schema)
+	if !ok {
+		t.Error("expected value property to be a schema")
+		return
+	}
+	sliceFormat := sliceSchema.Items.Format
 	if sliceFormat != goapidoc.SchemaInt64.Format {
 		t.Errorf("Expected int64 slice schema format to be Int64, got %v", sliceFormat)
 	}

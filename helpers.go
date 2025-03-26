@@ -106,7 +106,7 @@ func SchemaFromStruct(value any) (Schema, error) {
 			continue
 		}
 
-		fieldSchema, err := getFieldSchema(fValue)
+		fieldSchema, err := schemaFrom(fValue.Interface())
 		if err != nil {
 			return Schema{}, err
 		}
@@ -140,21 +140,6 @@ func getFieldValue(fValue reflect.Value) reflect.Value {
 		return fValue.Elem()
 	}
 	return fValue
-}
-
-func getFieldSchema(fValue reflect.Value) (Schema, error) {
-	if fValue.Type().Kind() == reflect.Struct && fValue.Type().Name() != "Time" {
-		example, err := schemaFrom(fValue.Interface())
-		if err != nil {
-			return Schema{}, err
-		}
-		return Schema{Type: "object", Properties: example.Properties}, nil
-	}
-	fieldSchema, err := schemaFrom(fValue.Interface())
-	if err != nil {
-		return Schema{}, errors.New("failed to generate schema from " + fValue.Type().String())
-	}
-	return fieldSchema, nil
 }
 
 func isRequired(field reflect.StructField) bool {

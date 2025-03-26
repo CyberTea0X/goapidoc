@@ -19,6 +19,7 @@ func TestRecursive(t *testing.T) {
 	raw, err := json.Marshal(schema)
 	if err != nil {
 		t.Error(err)
+		return
 	}
 	expected := `{"type":"object","properties":{"pet":{"type":"object","properties":{"age":{"type":"integer","example":1}}}}}`
 	if string(raw) != expected {
