@@ -9,6 +9,7 @@ import (
 
 func addr[T any](val T) *T { return &val }
 
+// Converts types to schemas (can be referenced)
 func SchemasOf(schemas ...any) Schemas {
 	s := make(Schemas)
 	for _, value := range schemas {
@@ -208,6 +209,9 @@ func SchemaFromPrimitiveType(t reflect.Type, example any) (Schema, error) {
 }
 
 func schemaFrom(value any) (Schema, error) {
+	if schema, ok := value.(Schema); ok {
+		return schema, nil
+	}
 	t := reflect.TypeOf(value)
 	switch t.Kind() {
 	case reflect.Struct:
