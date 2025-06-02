@@ -260,6 +260,10 @@ func ResponseWithJson(description string, schema Schema) Response {
 	}
 }
 
+func ResponseWithoutContent(description string) Response {
+	return Response{Description: description}
+}
+
 func RequestWithJson(description string, schema Schema, required bool) *RequestBody {
 	return &RequestBody{
 		Description: description,
