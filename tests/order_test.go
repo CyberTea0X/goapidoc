@@ -63,12 +63,12 @@ func TestDocumentFieldOrder(t *testing.T) {
 
 	expectedOrder := []string{
 		"openapi",
+		"servers",
 		"info",
+		"security",
 		"tags",
 		"paths",
 		"components",
-		"servers",
-		"security",
 	}
 
 	if !isOrdered(jsonStr, expectedOrder, t) {
@@ -78,7 +78,7 @@ func TestDocumentFieldOrder(t *testing.T) {
 	// === Проверка порядка в YAML ===
 
 	// небольшой костыль для yaml
-	expectedOrder[len(expectedOrder)-1] = "security:\n"
+	expectedOrder[3] = "security:\n"
 
 	yamlBytes, err := yaml.Marshal(doc)
 	if err != nil {

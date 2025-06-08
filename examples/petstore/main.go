@@ -110,4 +110,5 @@ func main() {
 		},
 	}
 	doc.SaveAsJson("petstore.json")
+	doc.SaveAsYaml("petstore.yaml")
 }

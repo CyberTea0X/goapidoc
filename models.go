@@ -20,12 +20,12 @@ const (
 
 type Document struct {
 	OpenApiVersion string          `json:"openapi" yaml:"openapi"`
+	Servers        []Server        `json:"servers,omitempty" yaml:"servers,omitempty"`
 	Info           Info            `json:"info" yaml:"info"`
+	Security       []Security      `json:"security,omitempty" yaml:"security,omitempty"`
 	Tags           []Tag           `json:"tags,omitempty" yaml:"tags,omitempty"`
 	Paths          map[string]Path `json:"paths" yaml:"paths"`
 	Components     *Components     `json:"components,omitempty" yaml:"components,omitempty"`
-	Servers        []Server        `json:"servers,omitempty" yaml:"servers,omitempty"`
-	Security       []Security      `json:"security,omitempty" yaml:"security,omitempty"`
 }
 
 func (d *Document) SaveAsJson(filename string) error {

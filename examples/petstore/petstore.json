@@ -130,6 +130,10 @@
     "schemas": {
       "Error": {
         "type": "object",
+        "required": [
+          "code",
+          "message"
+        ],
         "properties": {
           "code": {
             "type": "integer",
@@ -140,14 +144,14 @@
             "type": "string",
             "example": "server crushed"
           }
-        },
-        "required": [
-          "code",
-          "message"
-        ]
+        }
       },
       "Pet": {
         "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
         "properties": {
           "id": {
             "type": "integer",
@@ -162,16 +166,31 @@
             "type": "string",
             "example": "dogs"
           }
-        },
-        "required": [
-          "id",
-          "name"
-        ]
+        }
       },
       "Pets": {
         "type": "array",
         "items": {
-          "type": "object"
+          "type": "object",
+          "required": [
+            "id",
+            "name"
+          ],
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int64",
+              "example": 0
+            },
+            "name": {
+              "type": "string",
+              "example": ""
+            },
+            "tag": {
+              "type": "string",
+              "example": ""
+            }
+          }
         },
         "example": [
           {
