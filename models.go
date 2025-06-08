@@ -18,14 +18,16 @@ const (
 	Array   OapiType = "array"
 )
 
+type Paths map[string]Path
+
 type Document struct {
-	OpenApiVersion string          `json:"openapi" yaml:"openapi"`
-	Servers        []Server        `json:"servers,omitempty" yaml:"servers,omitempty"`
-	Info           Info            `json:"info" yaml:"info"`
-	Security       []Security      `json:"security,omitempty" yaml:"security,omitempty"`
-	Tags           []Tag           `json:"tags,omitempty" yaml:"tags,omitempty"`
-	Paths          map[string]Path `json:"paths" yaml:"paths"`
-	Components     *Components     `json:"components,omitempty" yaml:"components,omitempty"`
+	OpenApiVersion string      `json:"openapi" yaml:"openapi"`
+	Servers        []Server    `json:"servers,omitempty" yaml:"servers,omitempty"`
+	Info           Info        `json:"info" yaml:"info"`
+	Security       []Security  `json:"security,omitempty" yaml:"security,omitempty"`
+	Tags           []Tag       `json:"tags,omitempty" yaml:"tags,omitempty"`
+	Paths          Paths       `json:"paths" yaml:"paths"`
+	Components     *Components `json:"components,omitempty" yaml:"components,omitempty"`
 }
 
 func (d *Document) SaveAsJson(filename string) error {
@@ -151,6 +153,7 @@ type Method struct {
 	Tags        []string            `json:"tags,omitempty" yaml:"tags,omitempty"`
 	Parameters  []Parameter         `json:"parameters,omitempty" yaml:"parameters,omitempty"`
 	RequestBody *RequestBody        `json:"requestBody,omitempty" yaml:"requestBody,omitempty"`
+	Callbacks   map[string]Paths    `json:"callbacks,omitempty" yaml:"callbacks,omitempty"`
 	Responses   map[string]Response `json:"responses" yaml:"responses"`
 }
 

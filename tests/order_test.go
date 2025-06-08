@@ -2,7 +2,6 @@ package tests
 
 import (
 	"encoding/json"
-	"fmt"
 	"strings"
 	"testing"
 
@@ -101,7 +100,7 @@ func isOrdered(data string, expectedOrder []string, t *testing.T) bool {
 		firstPos := strings.Index(data, firstKey)
 		nextPos := strings.Index(data, nextKey)
 
-		fmt.Printf("%s → %d | %s → %d\n", firstKey, firstPos, nextKey, nextPos)
+		//fmt.Printf("%s → %d | %s → %d\n", firstKey, firstPos, nextKey, nextPos)
 
 		if firstPos == -1 || nextPos == -1 {
 			return false
