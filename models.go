@@ -28,6 +28,45 @@ type Document struct {
 	Security       []Security      `json:"security,omitempty"`
 }
 
+// maintains order
+func (d *Document) MarshalYAML() (any, error) {
+	return &struct {
+		OpenApiVersion string          `yaml:"openapi"`
+		Info           Info            `yaml:"info"`
+		Tags           []Tag           `yaml:"tags,omitempty"`
+		Paths          map[string]Path `yaml:"paths"`
+		Components     *Components     `yaml:"components,omitempty"`
+		Servers        []Server        `yaml:"servers,omitempty"`
+		Security       []Security      `yaml:"security,omitempty"`
+	}{
+		OpenApiVersion: d.OpenApiVersion,
+		Info:           d.Info,
+		Tags:           d.Tags,
+		Paths:          d.Paths,
+		Components:     d.Components,
+		Servers:        d.Servers,
+		Security:       d.Security,
+	}, nil
+}
+
+// maintains order
+func (i *Info) MarshalJSON() ([]byte, error) {
+	type Alias Info
+	return json.Marshal(&struct {
+		Title       string            `json:"title,omitempty"`
+		Description string            `json:"description,omitempty"`
+		Version     string            `json:"version,omitempty"`
+		Contact     map[string]string `json:"contact,omitempty"`
+		License     *License          `json:"license,omitempty"`
+	}{
+		Title:       i.Title,
+		Description: i.Description,
+		Version:     i.Version,
+		Contact:     i.Contact,
+		License:     i.License,
+	})
+}
+
 func (d *Document) SaveAsJson(filename string) error {
 	bytes, err := json.MarshalIndent(d, "", "  ")
 	if err != nil {
