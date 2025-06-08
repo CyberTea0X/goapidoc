@@ -80,12 +80,7 @@ func TestDocumentFieldOrder(t *testing.T) {
 	// небольшой костыль для yaml
 	expectedOrder[len(expectedOrder)-1] = "security:\n"
 
-	yamlData, err := doc.MarshalYAML()
-	if err != nil {
-		t.Errorf("failed to marshal YAML: %v", err)
-		return
-	}
-	yamlBytes, err := yaml.Marshal(yamlData)
+	yamlBytes, err := yaml.Marshal(doc)
 	if err != nil {
 		t.Errorf("failed to marshal YAML: %v", err)
 		return
