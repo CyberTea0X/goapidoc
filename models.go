@@ -90,25 +90,19 @@ func (d *Document) SaveAsJson(filename string) error {
 
 // SaveAsYaml сериализует документ в формате YAML и сохраняет в файл.
 func (d *Document) SaveAsYaml(filename string) error {
-	// Сначала маршализуем в JSON
-	jsonBytes, err := json.Marshal(d)
+	// Прямая маршализация через MarshalYAML, без промежуточного JSON
+	yamlData, err := d.MarshalYAML()
 	if err != nil {
-		return err
-	}
-
-	// Парсим JSON в общий интерфейс
-	var obj interface{}
-	if err := json.Unmarshal(jsonBytes, &obj); err != nil {
 		return err
 	}
 
 	// Маршализуем в YAML
-	yamlBytes, err := yaml.Marshal(obj)
+	yamlBytes, err := yaml.Marshal(yamlData)
 	if err != nil {
 		return err
 	}
 
-	// Записываем YAML в файл
+	// Сохраняем в файл
 	file, err := os.Create(filename)
 	if err != nil {
 		return err
@@ -116,10 +110,6 @@ func (d *Document) SaveAsYaml(filename string) error {
 	defer file.Close()
 
 	if _, err := file.Write(yamlBytes); err != nil {
-		return err
-	}
-
-	if err := file.Close(); err != nil {
 		return err
 	}
 
