@@ -7,8 +7,6 @@ import (
 	"strings"
 )
 
-func addr[T any](val T) *T { return &val }
-
 // Converts types to schemas (can be referenced)
 func SchemasOf(schemas ...any) Schemas {
 	s := make(Schemas)
@@ -34,16 +32,7 @@ func ParametersFromStruct(value any, in string) []Parameter {
 		if fValue.Type().Kind() == reflect.Pointer {
 			fValue = fValue.Elem()
 		}
-		propertyName := strings.Split(field.Tag.Get("json"), ",")[0]
-		if propertyName == "" {
-			propertyName = strings.Split(field.Tag.Get("query"), ",")[0]
-		}
-		if propertyName == "" {
-			propertyName = strings.Split(field.Tag.Get("form"), ",")[0]
-		}
-		if propertyName == "" {
-			panic("failed to infer property name in struct " + t.Name())
-		}
+		propertyName := getPropertyName(field)
 		fieldSchema, err := schemaFrom(fValue.Interface())
 		if err != nil {
 			panic(err)
@@ -125,7 +114,15 @@ func SchemaFromStruct(value any) (Schema, error) {
 }
 
 func getPropertyName(field reflect.StructField) string {
-	propertyName := strings.Split(field.Tag.Get("json"), ",")[0]
+	tags := []string{"json", "yaml", "query", "form"}
+	var propertyName string
+	for _, tag := range tags {
+		name := strings.Split(field.Tag.Get(tag), ",")[0]
+		if name != "" {
+			propertyName = name
+			break
+		}
+	}
 	if propertyName == "" {
 		propertyName = toSnake(field.Name)
 	}

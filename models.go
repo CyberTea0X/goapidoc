@@ -3,6 +3,8 @@ package goapidoc
 import (
 	"encoding/json"
 	"os"
+
+	"gopkg.in/yaml.v3"
 )
 
 type OapiType string
@@ -45,6 +47,44 @@ func (d *Document) SaveAsJson(filename string) error {
 	}
 	return nil
 
+}
+
+// SaveAsYaml сериализует документ в формате YAML и сохраняет в файл.
+func (d *Document) SaveAsYaml(filename string) error {
+	// Сначала маршализуем в JSON
+	jsonBytes, err := json.Marshal(d)
+	if err != nil {
+		return err
+	}
+
+	// Парсим JSON в общий интерфейс
+	var obj interface{}
+	if err := json.Unmarshal(jsonBytes, &obj); err != nil {
+		return err
+	}
+
+	// Маршализуем в YAML
+	yamlBytes, err := yaml.Marshal(obj)
+	if err != nil {
+		return err
+	}
+
+	// Записываем YAML в файл
+	file, err := os.Create(filename)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	if _, err := file.Write(yamlBytes); err != nil {
+		return err
+	}
+
+	if err := file.Close(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (d *Document) AddPath(route string, newpath Path) {
@@ -221,14 +261,6 @@ func (s Schemas) addSchema(value any) error {
 		return err
 	}
 	return nil
-}
-
-func (s Schemas) addSchemas(schemas ...any) []error {
-	errs := make([]error, len(schemas))
-	for i, value := range schemas {
-		errs[i] = s.addSchema(value)
-	}
-	return errs
 }
 
 type Schema struct {
