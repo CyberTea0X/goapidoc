@@ -51,20 +51,17 @@ func (d *Document) SaveAsJson(filename string) error {
 
 // SaveAsYaml сериализует документ в формате YAML и сохраняет в файл.
 func (d *Document) SaveAsYaml(filename string) error {
-	// Маршализуем в YAML
-	yamlBytes, err := yaml.Marshal(d)
-	if err != nil {
-		return err
-	}
-
-	// Сохраняем в файл
 	file, err := os.Create(filename)
 	if err != nil {
 		return err
 	}
 	defer file.Close()
 
-	if _, err := file.Write(yamlBytes); err != nil {
+	encoder := yaml.NewEncoder(file)
+	encoder.SetIndent(2) // Устанавливаем отступ в 2 пробела
+
+	err = encoder.Encode(d)
+	if err != nil {
 		return err
 	}
 
