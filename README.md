@@ -22,81 +22,121 @@ go get github.com/CyberTea0X/goapidoc
  - Write examples as golang structs
  - Supports openapi v 3.1.0
  - Write about 2 times less code than in json
+ - Write spec in golang, convert to openapi.yaml or openapi.json
 
 ## Examples
 
-### Write doc in golang
+### Petstore
 
-```golang
+```go
+package main
+
+import (
+	oapi "github.com/CyberTea0X/goapidoc"
+)
+
 type Pet struct {
 	Id   int64  `json:"id" validate:"required"`
-  	Name string `json:"name" validate:"required"`
-  	Tag  string `json:"tag"`
+	Name string `json:"name" validate:"required"`
+	Tag  string `json:"tag"`
 }
 
-type Pets []Pet
+type Error struct {
+	Code    int32  `json:"code" validate:"required"`
+	Message string `json:"message" validate:"required"`
+}
 
-doc := oapi.Document{
-	OpenApiVersion: "3.1.0",
-	Info: oapi.Info{
-		Version: "1.0.0",
-		Title:   "Swagger Petstore",
-		License: &oapi.License{
-			Name: "MIT",
-			Url:  "https://opensource.org/licenses/MIT",
+var DefaultResponse = oapi.ResponseWithJson("unexpected error", oapi.SchemaFrom(Error{
+	Code:    400,
+	Message: "bad request",
+}))
+
+func main() {
+	doc := oapi.Document{
+		OpenApiVersion: "3.1.0",
+		Info: oapi.Info{
+			Version: "1.0.0",
+			Title:   "Swagger Petstore",
+			License: &oapi.License{
+				Name: "MIT",
+				Url:  "https://opensource.org/licenses/MIT",
+			},
 		},
-	},
-	Servers: []oapi.Server{
-		{Url: "http://petstore.swagger.io/v1"},
-	},
-	Paths: map[string]oapi.Path{
-		"/pets": {
-			Get: &oapi.Method{
-				Summary:     "List all pets",
-				OperationId: "listPets",
-				Tags:        []string{"pets"},
-				Parameters: []oapi.Parameter{
-					{
-						Name:        "limit",
-						In:          "query",
-						Description: "How many items to return at one time (max 100)",
-						Required:    false,
-						Schema:      oapi.MustBuildSchemaFrom(int32(1)),
+		Servers: []oapi.Server{
+			{Url: "http://petstore.swagger.io/v1"},
+		},
+		Paths: map[string]oapi.Path{
+			"/pets": {
+				Get: &oapi.Method{
+					Summary:     "List all pets",
+					OperationId: "listPets",
+					Tags:        []string{"pets"},
+					Parameters: []oapi.Parameter{
+						{
+							Name:        "limit",
+							In:          "query",
+							Description: "How many items to return at one time (max 100)",
+							Required:    false,
+							Schema:      oapi.SchemaInt32,
+						},
 					},
-				},
-				Responses: map[string]oapi.Response{
-					"200": {
-						Description: "A paged array of pets",
-						Headers: map[string]oapi.Header{
-							"x-next": {
+					Responses: map[string]oapi.Response{
+						"200": oapi.ResponseWithJson("A paged array of pets", oapi.ArrayOf(oapi.Ref(Pet{}))).WithHeaders(
+							map[string]oapi.Header{"x-next": {
 								Description: "A link to the next page of responses",
 								Schema: oapi.Schema{
 									Type: oapi.String,
 								},
 							},
-						},
-						Content: oapi.ContentJsonSchemaRef(Pets{}),
+							},
+						),
+						"default": DefaultResponse,
 					},
-					"default": DefaultResponse,
+				},
+				Post: &oapi.Method{
+					Summary:     "Create a pet",
+					OperationId: "createPets",
+					Tags:        []string{"pets"},
+					Responses: map[string]oapi.Response{
+						"201":     oapi.ResponseWithoutContent("Null response"),
+						"default": DefaultResponse,
+					},
+				},
+			},
+			"/pets/{petId}": {
+				Get: &oapi.Method{
+					Summary:     "Info for a specific pet",
+					OperationId: "showPetById",
+					Tags:        []string{"pets"},
+					Parameters: []oapi.Parameter{
+						{
+							Name:        "petId",
+							In:          "path",
+							Required:    true,
+							Description: "The id of the pet to retrieve",
+							Schema:      oapi.Schema{Type: oapi.String},
+						},
+					},
+					Responses: map[string]oapi.Response{
+						"200":     oapi.ResponseWithJson("Expected response to a valid request", oapi.Ref(Pet{})),
+						"default": DefaultResponse,
+					},
 				},
 			},
 		},
 		Components: &oapi.Components{
-		Schemas: oapi.SchemasOf(
-			Pet{
-				Id:   1,
-				Name: "Dog",
-				Tag:  "dogs",
-			},
-			Pets{{Id: 1, Name: "Dog", Tag: "dogs"}, {Id: 2, Name: "Cat", Tag: "cats"}},
-			Error{
-				Code:    500,
-				Message: "server crushed",
-			},
-		),
-	},
+			Schemas: oapi.SchemasOf(
+				Pet{
+					Id:   1,
+					Name: "Dog",
+					Tag:  "dogs",
+				},
+			),
+		},
+	}
+	doc.SaveAsJson("petstore.json")
+	doc.SaveAsYaml("petstore.yaml")
 }
-doc.SaveAsJson("petstore.yaml")
 ```
 
 Spec:
@@ -126,7 +166,6 @@ paths:
           schema:
             type: integer
             format: int32
-            example: 1
       responses:
         "200":
           description: A paged array of pets
@@ -138,28 +177,90 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Pets'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pet'
         default:
           description: unexpected error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                type: object
+                required:
+                  - code
+                  - message
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 400
+                  message:
+                    type: string
+                    example: bad request
+    post:
+      summary: Create a pet
+      operationId: createPets
+      tags:
+        - pets
+      responses:
+        "201":
+          description: Null response
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - code
+                  - message
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 400
+                  message:
+                    type: string
+                    example: bad request
+  /pets/{petId}:
+    get:
+      summary: Info for a specific pet
+      operationId: showPetById
+      tags:
+        - pets
+      parameters:
+        - name: petId
+          in: path
+          description: The id of the pet to retrieve
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Expected response to a valid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pet'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - code
+                  - message
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 400
+                  message:
+                    type: string
+                    example: bad request
 components:
   schemas:
-    Error:
-      type: object
-      required:
-        - code
-        - message
-      properties:
-        code:
-          type: integer
-          format: int32
-          example: 500
-        message:
-          type: string
-          example: server crushed
     Pet:
       type: object
       required:
@@ -176,31 +277,6 @@ components:
         tag:
           type: string
           example: dogs
-    Pets:
-      type: array
-      items:
-        type: object
-        required:
-          - id
-          - name
-        properties:
-          id:
-            type: integer
-            format: int64
-            example: 0
-          name:
-            type: string
-            example: ""
-          tag:
-            type: string
-            example: ""
-      example:
-        - id: 1
-          name: Dog
-          tag: dogs
-        - id: 2
-          name: Cat
-          tag: cats
 ```
 
 check out petstore example

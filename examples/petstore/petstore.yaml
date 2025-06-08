@@ -22,7 +22,6 @@ paths:
           schema:
             type: integer
             format: int32
-            example: 1
       responses:
         "200":
           description: A paged array of pets
@@ -34,13 +33,26 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Pets'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pet'
         default:
           description: unexpected error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                type: object
+                required:
+                  - code
+                  - message
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 400
+                  message:
+                    type: string
+                    example: bad request
     post:
       summary: Create a pet
       operationId: createPets
@@ -54,7 +66,18 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                type: object
+                required:
+                  - code
+                  - message
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 400
+                  message:
+                    type: string
+                    example: bad request
   /pets/{petId}:
     get:
       summary: Info for a specific pet
@@ -80,22 +103,20 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                type: object
+                required:
+                  - code
+                  - message
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 400
+                  message:
+                    type: string
+                    example: bad request
 components:
   schemas:
-    Error:
-      type: object
-      required:
-        - code
-        - message
-      properties:
-        code:
-          type: integer
-          format: int32
-          example: 500
-        message:
-          type: string
-          example: server crushed
     Pet:
       type: object
       required:
@@ -112,28 +133,3 @@ components:
         tag:
           type: string
           example: dogs
-    Pets:
-      type: array
-      items:
-        type: object
-        required:
-          - id
-          - name
-        properties:
-          id:
-            type: integer
-            format: int64
-            example: 0
-          name:
-            type: string
-            example: ""
-          tag:
-            type: string
-            example: ""
-      example:
-        - id: 1
-          name: Dog
-          tag: dogs
-        - id: 2
-          name: Cat
-          tag: cats

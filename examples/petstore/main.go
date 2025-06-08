@@ -10,14 +10,15 @@ type Pet struct {
 	Tag  string `json:"tag"`
 }
 
-type Pets []Pet
-
 type Error struct {
 	Code    int32  `json:"code" validate:"required"`
 	Message string `json:"message" validate:"required"`
 }
 
-var DefaultResponse = oapi.ResponseWithJson("unexpected error", oapi.Ref(Error{}))
+var DefaultResponse = oapi.ResponseWithJson("unexpected error", oapi.SchemaFrom(Error{
+	Code:    400,
+	Message: "bad request",
+}))
 
 func main() {
 	doc := oapi.Document{
@@ -45,11 +46,11 @@ func main() {
 							In:          "query",
 							Description: "How many items to return at one time (max 100)",
 							Required:    false,
-							Schema:      oapi.SchemaFrom(int32(1)),
+							Schema:      oapi.SchemaInt32,
 						},
 					},
 					Responses: map[string]oapi.Response{
-						"200": oapi.ResponseWithJson("A paged array of pets", oapi.Ref(Pets{})).WithHeaders(
+						"200": oapi.ResponseWithJson("A paged array of pets", oapi.ArrayOf(oapi.Ref(Pet{}))).WithHeaders(
 							map[string]oapi.Header{"x-next": {
 								Description: "A link to the next page of responses",
 								Schema: oapi.Schema{
@@ -66,9 +67,7 @@ func main() {
 					OperationId: "createPets",
 					Tags:        []string{"pets"},
 					Responses: map[string]oapi.Response{
-						"201": {
-							Description: "Null response",
-						},
+						"201":     oapi.ResponseWithoutContent("Null response"),
 						"default": DefaultResponse,
 					},
 				},
@@ -100,11 +99,6 @@ func main() {
 					Id:   1,
 					Name: "Dog",
 					Tag:  "dogs",
-				},
-				Pets{{Id: 1, Name: "Dog", Tag: "dogs"}, {Id: 2, Name: "Cat", Tag: "cats"}},
-				Error{
-					Code:    500,
-					Message: "server crushed",
 				},
 			),
 		},
