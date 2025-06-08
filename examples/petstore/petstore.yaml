@@ -1,4 +1,6 @@
 openapi: 3.1.0
+servers:
+  - url: http://petstore.swagger.io/v1
 info:
   title: Swagger Petstore
   version: 1.0.0
@@ -135,5 +137,3 @@ components:
         - id: 2
           name: Cat
           tag: cats
-servers:
-  - url: http://petstore.swagger.io/v1
