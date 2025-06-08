@@ -1,0 +1,880 @@
+openapi: 3.1.0
+info:
+  title: Electronic journal service
+  description: Service providing operation of the electronic journal
+  version: "1.0"
+  license:
+    name: ""
+    url: ""
+security:
+  - bearerAuth: []
+tags:
+  - name: auth
+    description: authentication required
+  - name: teacher
+    description: teacher role required
+  - name: admin
+    description: admin role required
+paths:
+  /attendance:
+    put:
+      summary: Attach attendance
+      security:
+        - bearerAuth: []
+      description: Attaches the attendance list to the lesson. If attendance was already connected for the student, it is updated
+      operationId: attachAttendance
+      tags:
+        - auth
+        - teacher
+      requestBody:
+        required: true
+        description: List of records where the lesson and the fact of attendance/absence are indicated
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/attachAttendanceInput'
+      responses:
+        "200":
+          description: The operation was completed successfully. There is no point in returning the result.
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Error description
+        "403":
+          description: Access Denied
+        "500":
+          description: Server error
+  /class:
+    post:
+      summary: Add new class
+      security:
+        - bearerAuth: []
+      description: Adds new class
+      operationId: addClass
+      tags:
+        - auth
+      requestBody:
+        required: true
+        description: Class info
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/addClassInput'
+      responses:
+        "201":
+          description: Class successfully added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/addClassOutput'
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Error description
+        "500":
+          description: Server error
+  /grade:
+    post:
+      summary: Rate this
+      security:
+        - bearerAuth: []
+      description: Rate this
+      operationId: giveGrade
+      tags:
+        - auth
+        - teacher
+      requestBody:
+        description: Rate this
+      responses:
+        "201":
+          description: The rating has been set. given_at is the unix date when it was set, returned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  given_at:
+                    type: integer
+                    format: int64
+                    example: 10250045
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Error description
+        "403":
+          description: Access Denied
+        "500":
+          description: Server error
+  /grades:
+    get:
+      summary: Get ratings
+      security:
+        - bearerAuth: []
+      description: Get a list of student grades. given_at together with lesson id defines a single grade. given_at is a unix date
+      operationId: getGrades
+      tags:
+        - auth
+        - student
+        - teacher
+      parameters:
+        - name: student_id
+          in: query
+          description: id студента
+          required: true
+          schema: {}
+      responses:
+        "200":
+          description: The list of ratings has been successfully received.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getGradesOutput'
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Error description
+        "403":
+          description: Access Denied
+        "500":
+          description: Server error
+  /lesson:
+    post:
+      summary: Create new lesson
+      security:
+        - bearerAuth: []
+      description: Create new lesson
+      operationId: createLesson
+      tags:
+        - auth
+        - teacher
+      requestBody:
+        required: true
+        description: Lesson info
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/addLessonInput'
+      responses:
+        "201":
+          description: Lesson successfully added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/addLessonOutput'
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Error description
+        "403":
+          description: Access Denied
+        "409":
+          description: Conflict with another resource
+        "500":
+          description: Server error
+  /lesson/attach-files:
+    post:
+      summary: Attach files to lesson
+      security:
+        - bearerAuth: []
+      description: Attach files to a specific lesson
+      operationId: attachFilesToLesson
+      tags:
+        - auth
+        - teacher
+      requestBody:
+        description: Files to attach to the lesson
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/attachFilesInput'
+      responses:
+        "200":
+          description: Files successfully attached to the lesson
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/attachFilesOutput'
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Error description
+        "403":
+          description: Access Denied
+        "404":
+          description: There is no such lesson
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Error description
+        "500":
+          description: Server error
+  /login:
+    get:
+      summary: Login
+      description: Login by field and password
+      operationId: loginUser
+      parameters:
+        - name: code
+          in: query
+          description: ""
+          required: true
+          schema:
+            type: string
+            example: "43124589"
+        - name: password
+          in: query
+          description: ""
+          required: true
+          schema:
+            type: string
+            example: vladikkrutoymalchik2008
+      responses:
+        "201":
+          description: The user has successfully logged in.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/loginOutput'
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Error description
+        "401":
+          description: Wrong password or login
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Error description
+        "500":
+          description: Server error
+  /register:
+    post:
+      summary: Registration
+      description: New User Registration
+      operationId: registerUser
+      requestBody:
+        required: true
+        description: User data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/registerInput'
+      responses:
+        "201":
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/registerOutput'
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Error description
+        "500":
+          description: Server error
+  /student:
+    post:
+      summary: Add new student
+      security:
+        - bearerAuth: []
+      description: Add new student to the specified class
+      operationId: addStudent
+      tags:
+        - auth
+        - teacher
+      requestBody:
+        required: true
+        description: student info
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/addStudentInput'
+      responses:
+        "201":
+          description: Student successfully added into class
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/addStudentOutput'
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Error description
+        "403":
+          description: Access Denied
+        "500":
+          description: Server error
+  /students:
+    get:
+      summary: Get list of students
+      security:
+        - bearerAuth: []
+      description: Get a list of all students in a specified class
+      operationId: getStudents
+      tags:
+        - auth
+        - teacher
+      responses:
+        "200":
+          description: List of students successfully received
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getStudentsOutput'
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Error description
+        "403":
+          description: Access Denied
+        "500":
+          description: Server error
+  /subject:
+    post:
+      summary: Add item
+      security:
+        - bearerAuth: []
+      description: Add a new subject
+      operationId: subjectAdd
+      tags:
+        - auth
+        - teacher
+      requestBody:
+        required: true
+        description: Item Parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/subjectAddInput'
+      responses:
+        "201":
+          description: Code and link to the item page
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/subjectAddOutput'
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Error description
+        "403":
+          description: Access Denied
+        "500":
+          description: Server error
+  /teacher:
+    post:
+      summary: Add new teacher
+      security:
+        - bearerAuth: []
+      description: Adds new teacher into system
+      operationId: addTeacher
+      tags:
+        - auth
+        - admin
+      requestBody:
+        required: true
+        description: Teacher info
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/addTeacherInput'
+      responses:
+        "201":
+          description: Teacher added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/addTeacherOutput'
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Error description
+        "403":
+          description: Access Denied
+        "500":
+          description: Server error
+components:
+  schemas:
+    addClassInput:
+      type: object
+      required:
+        - name
+      properties:
+        description:
+          type: string
+          example: 8 class
+        name:
+          type: string
+          example: 8-A
+        teacher_id:
+          type: integer
+          format: int64
+          example: 542
+    addClassOutput:
+      type: object
+      properties:
+        class_id:
+          type: integer
+          format: int64
+          example: 142
+    addLessonInput:
+      type: object
+      required:
+        - index
+        - name
+        - date
+        - subject_id
+      properties:
+        class_id:
+          type: integer
+          format: int64
+          example: 1
+        date:
+          type: string
+          example: "2023-10-15"
+        description:
+          type: string
+          example: Addition and Subtraction
+        index:
+          type: integer
+          example: 1
+        is_online:
+          type: boolean
+          example: true
+        name:
+          type: string
+          example: Math first lesson
+        schedule_number:
+          type: integer
+          example: 1
+        subject_id:
+          type: integer
+          format: int64
+          example: 1
+        teacher_id:
+          type: integer
+          format: int64
+          example: 1
+    addLessonOutput:
+      type: object
+      properties:
+        lesson_id:
+          type: integer
+          format: int64
+          example: 1
+    addStudentInput:
+      type: object
+      required:
+        - class_id
+      properties:
+        class_id:
+          type: integer
+          format: int64
+          example: 415
+    addStudentOutput:
+      type: object
+      required:
+        - code
+        - password
+      properties:
+        code:
+          type: string
+          example: "14843928"
+        password:
+          type: string
+          example: vladikbrutal2009
+    addTeacherInput:
+      type: object
+      required:
+        - first_name
+        - last_name
+        - email
+      properties:
+        email:
+          type: string
+          example: ivan.ivanov@school.com
+        first_name:
+          type: string
+          example: Ivan
+        last_name:
+          type: string
+          example: Ivanov
+        phone_number:
+          type: string
+          example: "+79123456789"
+        subject_ids:
+          type: array
+          items:
+            type: integer
+            format: int64
+            example: 0
+          example:
+            - 101
+            - 102
+    addTeacherOutput:
+      type: object
+      required:
+        - teacher_id
+        - code
+        - password
+      properties:
+        code:
+          type: string
+          example: teacher123
+        password:
+          type: string
+          example: securepassword123
+        teacher_id:
+          type: integer
+          format: int64
+          example: 123
+    attachAttendanceInput:
+      type: object
+      required:
+        - lesson_id
+        - attendance
+      properties:
+        attendance:
+          type: array
+          items:
+            type: object
+            required:
+              - student_id
+              - presence
+            properties:
+              presence:
+                type: boolean
+                example: false
+              student_id:
+                type: integer
+                format: int64
+                example: 0
+          example:
+            - studentid: 1
+              presence: true
+            - studentid: 2
+              presence: true
+            - studentid: 2
+              presence: false
+        lesson_id:
+          type: integer
+          format: int64
+          example: 1
+    attachFilesInput:
+      type: object
+      required:
+        - lesson_id
+        - files
+      properties:
+        files:
+          type: array
+          items:
+            type: string
+            example: ""
+          example:
+            - file1.pdf
+            - file2.jpg
+        lesson_id:
+          type: integer
+          format: int64
+          example: 1
+    attachFilesOutput:
+      type: object
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+          example: true
+    getGradesOutput:
+      type: object
+      properties:
+        grades:
+          type: array
+          items:
+            type: object
+            properties:
+              comment:
+                type: string
+                example: ""
+              given_at:
+                type: integer
+                format: int64
+                example: 0
+              grade:
+                type: integer
+                format: int64
+                example: 0
+              lesson_id:
+                type: integer
+                format: int64
+                example: 0
+          example:
+            - lessonid: 1
+              grade: 95
+              givenat: 10250045
+              comment: Well done! You answered actively and worked in class.
+            - lessonid: 2
+              grade: 85
+              givenat: 10250045
+              comment: Good job, but could be better.
+    getStudentsInput:
+      type: object
+      required:
+        - class_id
+      properties:
+        class_id:
+          type: integer
+          format: int64
+          example: 415
+    getStudentsOutput:
+      type: object
+      required:
+        - students
+      properties:
+        students:
+          type: array
+          items:
+            type: object
+            required:
+              - id
+              - name
+              - lastname
+              - phone
+              - mail
+            properties:
+              id:
+                type: integer
+                format: int64
+                example: 0
+              lastname:
+                type: string
+                example: ""
+              mail:
+                type: string
+                example: ""
+              name:
+                type: string
+                example: ""
+              phone:
+                type: string
+                example: ""
+          example:
+            - id: 1
+              name: Ivan
+              lastname: Ivanov
+              phone: "+1234566789"
+              mail: vlomchetodumat@example.com
+            - id: 2
+              name: Petr
+              lastname: Petrov
+              phone: "+1234566789"
+              mail: vlomchetodumat@example.com
+    giveGradeInput:
+      type: object
+      required:
+        - lesson_id
+        - student_id
+        - grade
+      properties:
+        comment:
+          type: string
+          example: Well done! You answered actively and worked in class.
+        grade:
+          type: integer
+          format: int64
+          example: 95
+        lesson_id:
+          type: integer
+          format: int64
+          example: 1
+        student_id:
+          type: integer
+          format: int64
+          example: 1
+    loginOutput:
+      type: object
+      required:
+        - access_token
+        - access_expires_at
+        - refresh_token
+        - refresh_expires_at
+      properties:
+        access_expires_at:
+          type: integer
+          format: int64
+          example: 1738677032
+        access_token:
+          type: string
+          example: thisis.access.token
+        refresh_expires_at:
+          type: integer
+          format: int64
+          example: 1738677032
+        refresh_token:
+          type: string
+          example: thisis.refresh.token
+    registerInput:
+      type: object
+      required:
+        - name
+        - surname
+        - phone
+        - mail
+        - code
+        - password
+      properties:
+        code:
+          type: string
+          example: "43124589"
+        mail:
+          type: string
+          example: vladikdetskysadic@example.com
+        name:
+          type: string
+          example: Vladislav
+        password:
+          type: string
+          example: vladikkrutoymalchik2008
+        phone:
+          type: string
+          example: ""
+        surname:
+          type: string
+          example: Petrov
+    registerOutput:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          example: "43124589"
+    subjectAddInput:
+      type: object
+      required:
+        - name
+        - public
+        - instructor
+        - capacity
+      properties:
+        capacity:
+          type: integer
+          example: 30
+        description:
+          type: string
+          example: The Science of Numbers and Shapes
+        instructor:
+          type: integer
+          format: int64
+          example: 13
+        is_active:
+          type: boolean
+          example: true
+        name:
+          type: string
+          example: Mathematics
+        public:
+          type: boolean
+          example: true
+        requires_group:
+          type: string
+          example: 9 класс
+    subjectAddOutput:
+      type: object
+      required:
+        - subject_code
+        - url
+      properties:
+        subject_code:
+          type: integer
+          format: int64
+          example: 1341
+        url:
+          type: string
+          example: http://example.com/subjects/1341
+  securitySchemes:
+    bearerAuth:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http

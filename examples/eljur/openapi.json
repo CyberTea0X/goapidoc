@@ -9,6 +9,11 @@
       "url": ""
     }
   },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
   "tags": [
     {
       "name": "auth",
@@ -39,6 +44,7 @@
           "teacher"
         ],
         "requestBody": {
+          "required": true,
           "description": "List of records where the lesson and the fact of attendance/absence are indicated",
           "content": {
             "application/json": {
@@ -91,6 +97,7 @@
           "auth"
         ],
         "requestBody": {
+          "required": true,
           "description": "Class info",
           "content": {
             "application/json": {
@@ -268,6 +275,7 @@
           "teacher"
         ],
         "requestBody": {
+          "required": true,
           "description": "Lesson info",
           "content": {
             "application/json": {
@@ -474,6 +482,7 @@
         "description": "New User Registration",
         "operationId": "registerUser",
         "requestBody": {
+          "required": true,
           "description": "User data",
           "content": {
             "application/json": {
@@ -531,6 +540,7 @@
           "teacher"
         ],
         "requestBody": {
+          "required": true,
           "description": "student info",
           "content": {
             "application/json": {
@@ -641,6 +651,7 @@
           "teacher"
         ],
         "requestBody": {
+          "required": true,
           "description": "Item Parameters",
           "content": {
             "application/json": {
@@ -701,6 +712,7 @@
           "admin"
         ],
         "requestBody": {
+          "required": true,
           "description": "Teacher info",
           "content": {
             "application/json": {
@@ -751,6 +763,9 @@
     "schemas": {
       "addClassInput": {
         "type": "object",
+        "required": [
+          "name"
+        ],
         "properties": {
           "description": {
             "type": "string",
@@ -765,10 +780,7 @@
             "format": "int64",
             "example": 542
           }
-        },
-        "required": [
-          "name"
-        ]
+        }
       },
       "addClassOutput": {
         "type": "object",
@@ -782,6 +794,12 @@
       },
       "addLessonInput": {
         "type": "object",
+        "required": [
+          "index",
+          "name",
+          "date",
+          "subject_id"
+        ],
         "properties": {
           "class_id": {
             "type": "integer",
@@ -822,13 +840,7 @@
             "format": "int64",
             "example": 1
           }
-        },
-        "required": [
-          "index",
-          "name",
-          "date",
-          "subject_id"
-        ]
+        }
       },
       "addLessonOutput": {
         "type": "object",
@@ -842,19 +854,23 @@
       },
       "addStudentInput": {
         "type": "object",
+        "required": [
+          "class_id"
+        ],
         "properties": {
           "class_id": {
             "type": "integer",
             "format": "int64",
             "example": 415
           }
-        },
-        "required": [
-          "class_id"
-        ]
+        }
       },
       "addStudentOutput": {
         "type": "object",
+        "required": [
+          "code",
+          "password"
+        ],
         "properties": {
           "code": {
             "type": "string",
@@ -864,14 +880,15 @@
             "type": "string",
             "example": "vladikbrutal2009"
           }
-        },
-        "required": [
-          "code",
-          "password"
-        ]
+        }
       },
       "addTeacherInput": {
         "type": "object",
+        "required": [
+          "first_name",
+          "last_name",
+          "email"
+        ],
         "properties": {
           "email": {
             "type": "string",
@@ -892,22 +909,24 @@
           "subject_ids": {
             "type": "array",
             "items": {
-              "type": "integer"
+              "type": "integer",
+              "format": "int64",
+              "example": 0
             },
             "example": [
               101,
               102
             ]
           }
-        },
-        "required": [
-          "first_name",
-          "last_name",
-          "email"
-        ]
+        }
       },
       "addTeacherOutput": {
         "type": "object",
+        "required": [
+          "teacher_id",
+          "code",
+          "password"
+        ],
         "properties": {
           "code": {
             "type": "string",
@@ -922,20 +941,34 @@
             "format": "int64",
             "example": 123
           }
-        },
-        "required": [
-          "teacher_id",
-          "code",
-          "password"
-        ]
+        }
       },
       "attachAttendanceInput": {
         "type": "object",
+        "required": [
+          "lesson_id",
+          "attendance"
+        ],
         "properties": {
           "attendance": {
             "type": "array",
             "items": {
-              "type": "object"
+              "type": "object",
+              "required": [
+                "student_id",
+                "presence"
+              ],
+              "properties": {
+                "presence": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "student_id": {
+                  "type": "integer",
+                  "format": "int64",
+                  "example": 0
+                }
+              }
             },
             "example": [
               {
@@ -957,19 +990,20 @@
             "format": "int64",
             "example": 1
           }
-        },
-        "required": [
-          "lesson_id",
-          "attendance"
-        ]
+        }
       },
       "attachFilesInput": {
         "type": "object",
+        "required": [
+          "lesson_id",
+          "files"
+        ],
         "properties": {
           "files": {
             "type": "array",
             "items": {
-              "type": "string"
+              "type": "string",
+              "example": ""
             },
             "example": [
               "file1.pdf",
@@ -981,23 +1015,19 @@
             "format": "int64",
             "example": 1
           }
-        },
-        "required": [
-          "lesson_id",
-          "files"
-        ]
+        }
       },
       "attachFilesOutput": {
         "type": "object",
+        "required": [
+          "success"
+        ],
         "properties": {
           "success": {
             "type": "boolean",
             "example": true
           }
-        },
-        "required": [
-          "success"
-        ]
+        }
       },
       "getGradesOutput": {
         "type": "object",
@@ -1005,7 +1035,28 @@
           "grades": {
             "type": "array",
             "items": {
-              "type": "object"
+              "type": "object",
+              "properties": {
+                "comment": {
+                  "type": "string",
+                  "example": ""
+                },
+                "given_at": {
+                  "type": "integer",
+                  "format": "int64",
+                  "example": 0
+                },
+                "grade": {
+                  "type": "integer",
+                  "format": "int64",
+                  "example": 0
+                },
+                "lesson_id": {
+                  "type": "integer",
+                  "format": "int64",
+                  "example": 0
+                }
+              }
             },
             "example": [
               {
@@ -1026,24 +1077,57 @@
       },
       "getStudentsInput": {
         "type": "object",
+        "required": [
+          "class_id"
+        ],
         "properties": {
           "class_id": {
             "type": "integer",
             "format": "int64",
             "example": 415
           }
-        },
-        "required": [
-          "class_id"
-        ]
+        }
       },
       "getStudentsOutput": {
         "type": "object",
+        "required": [
+          "students"
+        ],
         "properties": {
           "students": {
             "type": "array",
             "items": {
-              "type": "object"
+              "type": "object",
+              "required": [
+                "id",
+                "name",
+                "lastname",
+                "phone",
+                "mail"
+              ],
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "format": "int64",
+                  "example": 0
+                },
+                "lastname": {
+                  "type": "string",
+                  "example": ""
+                },
+                "mail": {
+                  "type": "string",
+                  "example": ""
+                },
+                "name": {
+                  "type": "string",
+                  "example": ""
+                },
+                "phone": {
+                  "type": "string",
+                  "example": ""
+                }
+              }
             },
             "example": [
               {
@@ -1062,13 +1146,15 @@
               }
             ]
           }
-        },
-        "required": [
-          "students"
-        ]
+        }
       },
       "giveGradeInput": {
         "type": "object",
+        "required": [
+          "lesson_id",
+          "student_id",
+          "grade"
+        ],
         "properties": {
           "comment": {
             "type": "string",
@@ -1089,15 +1175,16 @@
             "format": "int64",
             "example": 1
           }
-        },
-        "required": [
-          "lesson_id",
-          "student_id",
-          "grade"
-        ]
+        }
       },
       "loginOutput": {
         "type": "object",
+        "required": [
+          "access_token",
+          "access_expires_at",
+          "refresh_token",
+          "refresh_expires_at"
+        ],
         "properties": {
           "access_expires_at": {
             "type": "integer",
@@ -1117,16 +1204,18 @@
             "type": "string",
             "example": "thisis.refresh.token"
           }
-        },
-        "required": [
-          "access_token",
-          "access_expires_at",
-          "refresh_token",
-          "refresh_expires_at"
-        ]
+        }
       },
       "registerInput": {
         "type": "object",
+        "required": [
+          "name",
+          "surname",
+          "phone",
+          "mail",
+          "code",
+          "password"
+        ],
         "properties": {
           "code": {
             "type": "string",
@@ -1152,30 +1241,28 @@
             "type": "string",
             "example": "Petrov"
           }
-        },
-        "required": [
-          "name",
-          "surname",
-          "phone",
-          "mail",
-          "code",
-          "password"
-        ]
+        }
       },
       "registerOutput": {
         "type": "object",
+        "required": [
+          "id"
+        ],
         "properties": {
           "id": {
             "type": "string",
             "example": "43124589"
           }
-        },
-        "required": [
-          "id"
-        ]
+        }
       },
       "subjectAddInput": {
         "type": "object",
+        "required": [
+          "name",
+          "public",
+          "instructor",
+          "capacity"
+        ],
         "properties": {
           "capacity": {
             "type": "integer",
@@ -1206,16 +1293,14 @@
             "type": "string",
             "example": "9 класс"
           }
-        },
-        "required": [
-          "name",
-          "public",
-          "instructor",
-          "capacity"
-        ]
+        }
       },
       "subjectAddOutput": {
         "type": "object",
+        "required": [
+          "subject_code",
+          "url"
+        ],
         "properties": {
           "subject_code": {
             "type": "integer",
@@ -1226,11 +1311,7 @@
             "type": "string",
             "example": "http://example.com/subjects/1341"
           }
-        },
-        "required": [
-          "subject_code",
-          "url"
-        ]
+        }
       }
     },
     "securitySchemes": {
@@ -1240,10 +1321,5 @@
         "type": "http"
       }
     }
-  },
-  "security": [
-    {
-      "bearerAuth": []
-    }
-  ]
+  }
 }

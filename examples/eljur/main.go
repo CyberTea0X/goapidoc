@@ -8,6 +8,8 @@ func main() {
 	generateDocs := flag.Bool("docs", false, "generate openapi docs")
 	flag.Parse()
 	if *generateDocs {
-		BuildDocument().SaveAsJson("openapi.json")
+		doc := BuildDocument()
+		doc.SaveAsJson("openapi.json")
+		doc.SaveAsYaml("openapi.yaml")
 	}
 }
